@@ -10,6 +10,9 @@ This repository contains GitOps configurations for deploying and managing DS mic
 - **Catalog Service**   
   The service provides a REST API for managing, searching, and sharing catalog items.
 
+- **Neo4j With Neosemantics (n10s)**   
+  The Neo4j (Enterprise Edition) database with the Neosemantics (n10s) plugin.
+
 ## Structure
 
 - Each service has its own directory containing a `fleet.yaml` file and related Helm values.
