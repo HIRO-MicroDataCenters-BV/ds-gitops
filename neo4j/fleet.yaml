@@ -9,3 +9,6 @@ spec:
     repo: https://hiro-microdatacenters-bv.github.io/Neo4j-With-Neosemantics/helm-charts
     releaseName: neo4j-semantics
     targetNamespace: nextgen
+  targets:
+    - name: all
+      clusterSelector: {}

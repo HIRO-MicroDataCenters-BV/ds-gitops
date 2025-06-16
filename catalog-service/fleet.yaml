@@ -11,3 +11,6 @@ spec:
     valuesFiles:
       - values.yaml
     targetNamespace: nextgen
+  targets:
+    - name: all
+      clusterSelector: {}
