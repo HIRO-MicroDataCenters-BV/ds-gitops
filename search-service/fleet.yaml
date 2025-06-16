@@ -2,7 +2,7 @@ apiVersion: fleet.cattle.io/v1alpha1
 kind: Bundle
 metadata:
   name: ds-search-service
-  namespace: fleet-default
+  namespace: nextgen-workspace
 spec:
   helm:
     chart: server
