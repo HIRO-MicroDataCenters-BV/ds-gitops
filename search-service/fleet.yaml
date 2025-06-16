@@ -1,9 +1,13 @@
-name: ds-search-service
-namespace: fleet-default
-helm:
-  chart: server
-  repo: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts
-  releaseName: ds-search
-  valuesFiles:
-    - values.yaml
-  targetNamespace: nextgen
+apiVersion: fleet.cattle.io/v1alpha1
+kind: Bundle
+metadata:
+  name: ds-search-service
+  namespace: fleet-default
+spec:
+  helm:
+    chart: server
+    repo: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts
+    releaseName: ds-search
+    valuesFiles:
+      - values.yaml
+    targetNamespace: nextgen
