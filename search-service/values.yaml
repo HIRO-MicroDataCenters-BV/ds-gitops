@@ -1,0 +1,6 @@
+ingress:
+  host: nextgen.hiro-develop.nl
+  nodes:
+    - nodeId: hus
+    - nodeId: ki
+    - nodeId: uva
