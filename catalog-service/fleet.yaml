@@ -1,16 +1,6 @@
-apiVersion: fleet.cattle.io/v1alpha1
-kind: Bundle
-metadata:
-  name: ds-catalog
-  namespace: fleet-default
-spec:
-  helm:
-    chart: ds-catalog
-    repo: https://hiro-microdatacenters-bv.github.io/ds-catalog/helm-charts
-    releaseName: ds-catalog
-    valuesFiles:
-      - values.yaml
-    targetNamespace: nextgen
-  targets:
-    - name: all
-      clusterSelector: {}
+defaultNamespace: nextgen
+helm:
+  chart: https://hiro-microdatacenters-bv.github.io/ds-catalog/helm-charts/
+  releaseName: ds-catalog
+  valuesFiles:
+    - values.yaml
