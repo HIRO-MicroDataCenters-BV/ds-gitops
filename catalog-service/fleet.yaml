@@ -1,6 +1,7 @@
 defaultNamespace: nextgen
 helm:
-  chart: https://hiro-microdatacenters-bv.github.io/ds-catalog/helm-charts/
+  repo: https://hiro-microdatacenters-bv.github.io/ds-catalog/helm-charts
+  chart: ds-catalog
   releaseName: ds-catalog
   valuesFiles:
     - values.yaml
