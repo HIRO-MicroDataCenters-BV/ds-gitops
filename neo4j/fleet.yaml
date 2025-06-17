@@ -2,7 +2,7 @@ apiVersion: fleet.cattle.io/v1alpha1
 kind: Bundle
 metadata:
   name: neo4j-semantics
-  namespace: nextgen-workspace
+  namespace: fleet-default
 spec:
   helm:
     chart: database
