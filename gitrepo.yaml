@@ -6,3 +6,12 @@ metadata:
 spec:
   repo: https://github.com/HIRO-MicroDataCenters-BV/ds-gitops.git
   branch: main
+  paths:
+    - catalog-service/
+    - neo4j/
+    - search-service/
+  targets:
+    - name: nextgen-clusters
+      clusterSelector:
+        matchLabels:
+          name: nextgen
