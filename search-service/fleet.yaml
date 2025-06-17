@@ -1,6 +1,6 @@
 defaultNamespace: nextgen
 helm:
-  chart: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts/server
+  chart: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts/
   releaseName: ds-search
   valuesFiles:
     - values.yaml
