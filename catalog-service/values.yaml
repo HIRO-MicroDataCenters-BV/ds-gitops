@@ -6,4 +6,4 @@ ingress:
     - nodeId: uva
     
 migrate:
-  enabled: true
+  enabled: false
