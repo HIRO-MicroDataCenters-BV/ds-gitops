@@ -2,7 +2,7 @@ apiVersion: fleet.cattle.io/v1alpha1
 kind: GitRepo
 metadata:
   name: nextgen
-  namespace: nextgen-workspace
+  namespace: fleet-default
 spec:
   repo: https://github.com/HIRO-MicroDataCenters-BV/ds-gitops.git
   branch: main
