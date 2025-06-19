@@ -1,0 +1,11 @@
+nodeSelector:
+  node-id: hus
+
+ingress:
+  host: nextgen.hiro-develop.nl
+  nodeId: hus
+
+backend:
+  catalogName: "HUS Catalog"
+  searchServiceURL: https://ds-search.hus.nextgen.hiro-develop.nl
+  catalogServiceURL: https://ds-catalog.hus.nextgen.hiro-develop.nl

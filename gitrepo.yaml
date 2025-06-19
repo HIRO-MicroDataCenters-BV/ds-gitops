@@ -10,5 +10,8 @@ spec:
     - catalog-service/
     - neo4j/
     - search-service/
+    - frontend/uva/
+    - frontend/ki/
+    - frontend/hus/
   targets:
     - clusterName: nextgen

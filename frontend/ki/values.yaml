@@ -1,0 +1,11 @@
+nodeSelector:
+  node-id: ki
+
+ingress:
+  host: nextgen.hiro-develop.nl
+  nodeId: ki
+
+backend:
+  catalogName: "KI Catalog"
+  searchServiceURL: https://ds-search.ki.nextgen.hiro-develop.nl
+  catalogServiceURL: https://ds-catalog.ki.nextgen.hiro-develop.nl
