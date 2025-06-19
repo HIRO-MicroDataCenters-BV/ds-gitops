@@ -1,0 +1,7 @@
+defaultNamespace: nextgen
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/nextgen-fe/helm-charts
+  chart: app
+  releaseName: ds-frontend-hus
+  valuesFiles:
+    - values.yaml

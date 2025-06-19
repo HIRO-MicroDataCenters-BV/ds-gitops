@@ -1,0 +1,11 @@
+nodeSelector:
+  node-id: uva
+
+ingress:
+  host: nextgen.hiro-develop.nl
+  nodeId: uva
+
+backend:
+  catalogName: "UVA Catalog"
+  searchServiceURL: https://ds-search.uva.nextgen.hiro-develop.nl
+  catalogServiceURL: https://ds-catalog.uva.nextgen.hiro-develop.nl
