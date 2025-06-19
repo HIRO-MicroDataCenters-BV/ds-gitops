@@ -13,6 +13,9 @@ This repository contains GitOps configurations for deploying and managing DS mic
 - **Neo4j With Neosemantics (n10s)**   
   The Neo4j (Enterprise Edition) database with the Neosemantics (n10s) plugin.
 
+- **Frontend**
+  The frontend is the user interface of the NextGen Node that allows users to access and interact with its features.
+
 ## Structure
 
 - Each service has its own directory containing a `fleet.yaml` file and related Helm values.
