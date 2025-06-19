@@ -6,12 +6,8 @@ metadata:
 spec:
   repo: https://github.com/HIRO-MicroDataCenters-BV/ds-gitops.git
   branch: main
-  paths:
-    - catalog-service/
-    - neo4j/
-    - search-service/
-    - frontend-uva/
-    - frontend-ki/
-    - frontend-hus/
+  keepResources: true #resource not removed after gitrepo removal
+  correctDrift: #enable self-healing
+    enabled: true
   targets:
     - clusterName: nextgen
