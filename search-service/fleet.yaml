@@ -3,5 +3,6 @@ helm:
   chart: server
   repo: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts
   releaseName: ds-search
+  version: 0.2.2
   valuesFiles:
     - values.yaml
