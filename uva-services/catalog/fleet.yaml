@@ -1,4 +1,6 @@
 defaultNamespace: uva
+dependsOn:
+  - name: neo4j
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-catalog/helm-charts
   chart: ds-catalog

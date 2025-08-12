@@ -1,4 +1,6 @@
 defaultNamespace: ki
+dependsOn:
+  - name: catalog
 helm:
   chart: server
   repo: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts
