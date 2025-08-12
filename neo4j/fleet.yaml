@@ -1,5 +1,0 @@
-defaultNamespace: nextgen
-helm:
-  repo: https://hiro-microdatacenters-bv.github.io/Neo4j-With-Neosemantics/helm-charts
-  chart: database
-  releaseName: neo4j-semantics

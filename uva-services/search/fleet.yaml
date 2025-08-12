@@ -1,0 +1,8 @@
+defaultNamespace: uva
+helm:
+  chart: server
+  repo: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts
+  releaseName: ds-search
+  version: 0.2.2-dev.6.daemonset-to-dep.9e224f5a
+  valuesFiles:
+    - values.yaml

@@ -1,12 +1,12 @@
 env:
-  - name: DS_SEARCH__POD_NAMESPACE
-    value: "nextgen"
+  - name: DS_SEARCH__PEERS_NAMESPACES
+    value: "ki,hus,uva"
   - name: DS_SEARCH__SERVICE_NAME
     value: "ds-search"
   - name: DS_SEARCH__SERVICE_PORT
     value: "8080"
   - name: DS_SEARCH__CATALOG_SERVICE_URL
-    value: "http://127.0.0.1:8081"
+    value: "http://ds-catalog:8081"
   - name: DS_SEARCH__REQUEST_TIMEOUT
     value: "5.0"
   - name: DS_SEARCH__DISCOVERY_TYPE
@@ -16,7 +16,8 @@ env:
 
 ingress:
   host: nextgen.hiro-develop.nl
-  nodes:
-    - nodeId: hus
-    - nodeId: ki
-    - nodeId: uva
+  
+nodeSelector:
+  role: hus
+  
+namespace: hus

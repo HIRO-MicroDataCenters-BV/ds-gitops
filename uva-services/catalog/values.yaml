@@ -1,0 +1,10 @@
+ingress:
+  host: nextgen.hiro-develop.nl
+    
+migrate:
+  enabled: false
+
+nodeSelector:
+  role: uva
+
+namespace: uva

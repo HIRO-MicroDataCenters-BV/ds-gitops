@@ -1,9 +1,10 @@
 nodeSelector:
-  node-id: ki
+  role: ki
+
+namespace: ki
 
 ingress:
   host: nextgen.hiro-develop.nl
-  nodeId: ki
 
 backend:
   catalogName: "KI Catalog"
