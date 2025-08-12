@@ -1,8 +1,10 @@
-defaultNamespace: nextgen
+defaultNamespace: hus
+dependsOn:
+  - name: neo4j
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-catalog/helm-charts
   chart: ds-catalog
   releaseName: ds-catalog
-  version: 0.2.1
+  version: 0.2.2-dev.6.daemonset-to-dep.c851b1f2
   valuesFiles:
     - values.yaml

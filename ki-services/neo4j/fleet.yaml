@@ -1,0 +1,8 @@
+defaultNamespace: ki
+helm:
+  repo: https://helm.neo4j.com/neo4j
+  chart: neo4j
+  version: 2025.6.2
+  releaseName: ds-neo4j
+  valuesFiles:
+    - values.yaml

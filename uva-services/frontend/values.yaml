@@ -1,9 +1,10 @@
 nodeSelector:
-  node-id: uva
+  role: uva
+
+namespace: uva
 
 ingress:
   host: nextgen.hiro-develop.nl
-  nodeId: uva
 
 backend:
   catalogName: "UVA Catalog"
