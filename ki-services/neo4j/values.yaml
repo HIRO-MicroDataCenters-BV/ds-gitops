@@ -4,6 +4,10 @@ image:
   imagePullSecrets:
     - "docker-image-credentials"
 
+imagePullSecret:
+  create: false
+
+
 volumes:
   data:
     labels:
