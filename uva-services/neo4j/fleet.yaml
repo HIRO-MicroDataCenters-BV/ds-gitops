@@ -4,5 +4,6 @@ helm:
   chart: neo4j
   version: 2025.6.2
   releaseName: ds-neo4j
+  disableLookups: true
   valuesFiles:
     - values.yaml
