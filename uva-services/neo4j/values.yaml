@@ -40,5 +40,14 @@ neo4j:
       cpu: "4"
 
 
-nodeSelector:
-  role: uva
+nodeSelector: {}
+
+podSpec:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: role
+          operator: In
+          values:
+          - uva

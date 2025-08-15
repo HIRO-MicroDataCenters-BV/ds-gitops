@@ -1,6 +1,6 @@
 defaultNamespace: ki
 dependsOn:
-  - name: catalog
+  - name: nextgen-gitops-ki-services-catalog
 helm:
   chart: ds-search
   repo: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts
