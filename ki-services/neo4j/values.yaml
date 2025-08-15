@@ -4,10 +4,6 @@ image:
   imagePullSecrets:
     - "docker-image-credentials"
 
-imagePullSecret:
-  create: false
-
-
 volumes:
   data:
     labels:
@@ -22,6 +18,8 @@ neo4j:
   password: "123456789"
   acceptLicenseAgreement: "yes"
   edition: enterprise
+  imagePullSecret:
+    create: false
   config:
     dbms.default_database: "neo4j"
     dbms.security.procedures.unrestricted: "n10s.*,apoc.*"
