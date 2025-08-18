@@ -47,12 +47,13 @@ services:
 
 nodeSelector: {}
 
-podSpec:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: role
-          operator: In
-          values:
-          - hus
+podSpec: {}
+# Temporarily disabled node affinity to test image pull issue
+# nodeAffinity:
+#   requiredDuringSchedulingIgnoredDuringExecution:
+#     nodeSelectorTerms:
+#     - matchExpressions:
+#       - key: role
+#         operator: In
+#         values:
+#         - hus
