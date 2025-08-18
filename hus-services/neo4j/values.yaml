@@ -40,6 +40,11 @@ neo4j:
       cpu: "4"
 
 
+services:
+  neo4j:
+    spec:
+      type: ClusterIP
+
 nodeSelector: {}
 
 podSpec:
