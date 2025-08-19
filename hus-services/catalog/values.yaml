@@ -2,7 +2,7 @@ ingress:
   host: nextgen.hiro-develop.nl
     
 migrate:
-  enabled: false
+  enabled: true
 
 nodeSelector:
   role: hus
