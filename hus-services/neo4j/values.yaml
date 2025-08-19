@@ -45,14 +45,5 @@ services:
     spec:
       type: ClusterIP
 
-nodeSelector: {}
-
-podSpec:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: role
-          operator: In
-          values:
-          - hus
+nodeSelector:
+  role: hus

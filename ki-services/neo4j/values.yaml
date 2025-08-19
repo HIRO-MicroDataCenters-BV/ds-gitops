@@ -47,12 +47,5 @@ services:
 
 nodeSelector: {}
 
-podSpec:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: role
-          operator: In
-          values:
-          - ki
+nodeSelector:
+  role: ki
