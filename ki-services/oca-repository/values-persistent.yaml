@@ -1,0 +1,7 @@
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClassName: harvester   # you can omit this since it's default, but explicit is fine
+  accessModes:
+    - ReadWriteOnce
+  existingClaim: ""             # set to a PVC name if you already have one

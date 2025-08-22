@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oca-repository.fullname" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "oca-repository.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "oca-repository.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "oca-repository.selectorLabels" . | nindent 8 }}
+    spec:
+      initContainers:
+        - name: init-data-dirs
+          image: busybox:1.36
+          command: ['sh','-lc','mkdir -p /data/entries /data/db /data/cache /data/db_search /data/oca_repo_cache && chown -R 1000:1000 /data']
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      containers:
+        - name: oca-repository
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: http
+          volumeMounts:
+            - name: config
+              mountPath: /app/config/config.yml
+              subPath: config.yml
+              readOnly: true
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: config
+          configMap:
+            name: oca-repository-config
+            optional: false
+        - name: data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistence.existingClaim -}}
+              {{ .Values.persistence.existingClaim }}
+            {{- else -}}
+              {{ include "oca-repository.fullname" . }}-pvc
+            {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
