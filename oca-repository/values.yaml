@@ -1,0 +1,7 @@
+ingress:
+  host: oca-repository.nextgen.hiro-develop.nl
+
+nodeSelector:
+  role: ki
+
+namespace: ki
