@@ -1,5 +1,5 @@
 ingress:
-  host: oca-repository.nextgen.hiro-develop.nl
+  host: oca-repository.marketplace.nextgen.hiro-develop.nl
 
 nodeSelector:
   role: marketplace
