@@ -1,4 +1,4 @@
-defaultNamespace: ki
+defaultNamespace: marketplace
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-oca-integration/helm-charts
   chart: oca-repository

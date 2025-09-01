@@ -2,6 +2,6 @@ ingress:
   host: oca-repository.nextgen.hiro-develop.nl
 
 nodeSelector:
-  role: ki
+  role: marketplace
 
-namespace: ki
+namespace: marketplace
