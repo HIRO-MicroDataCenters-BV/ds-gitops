@@ -1,5 +1,5 @@
 env:
-  - name: DS_OCA_REPOSITORY__BUNDLES_URL
+  - name: DS_OCA_REPOSITORY_BUNDLES_URL
     value: "https://oca-repository.marketplace.nextgen.hiro-develop.nl/oca-bundles"
   - name: LOG_LEVEL
     value: "DEBUG"
