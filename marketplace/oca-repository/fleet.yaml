@@ -3,6 +3,6 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-oca-integration/helm-charts
   chart: oca-repository
   releaseName: ds-oca-repository
-  version: 0.1.0-dev.54.feature-fixing-v.c5b27321
+  version: 0.1.0-dev.55.feature-fixing-v.c4e67ba2
   valuesFiles:
     - values.yaml
