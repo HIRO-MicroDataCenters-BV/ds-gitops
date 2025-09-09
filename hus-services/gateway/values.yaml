@@ -1,0 +1,149 @@
+ingress:
+  host: nextgen.hiro-develop.nl
+
+nodeSelector:
+  role: hus
+
+namespace: hus
+
+## APISIX Configuration
+config:
+  apisixConfig: |
+    apisix:
+      node_listen: 9080
+      enable_heartbeat: false
+      enable_admin: false
+      enable_admin_cors: false
+      enable_debug: false
+      enable_dev_mode: false
+      enable_reuseport: true
+      enable_ipv6: true
+    deployment:
+      role: data_plane
+      role_data_plane:
+        config_provider: yaml
+    ext-plugin:
+      path_for_test: "/tmp/runner.sock"
+    #END
+
+  routesConfig: |
+    routes:
+      - id: 1
+        methods:
+          - GET
+        uri: "/health"
+        name: "health-check"
+        plugins:
+          proxy-rewrite:
+            uri: "/status/200"
+        upstream:
+          type: roundrobin
+          scheme: https
+          nodes:
+            "httpbin.org:443": 1
+
+
+
+      - id: 2
+        uri: "/anything/*"
+        methods:
+          - GET
+          - POST
+        upstream:
+          type: roundrobin
+          scheme: https
+          nodes:
+            "httpbin.org:443": 1
+
+
+      - id: 3
+        uri: "/anything/*"
+        methods:
+          - GET
+          - POST
+        upstream:
+          type: roundrobin
+          scheme: https
+          nodes:
+            "httpbin.org:443": 1
+
+
+      - id: ds-catalog-route
+        uris:
+          - "/catalog"
+          - "/catalog/*"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          - OPTIONS
+        upstream:
+          type: roundrobin
+          scheme: http
+          nodes:
+            "ds-catalog.hus.svc.cluster.local:8081": 10
+          timeout:
+            connect: 10
+            send: 30
+            read: 30
+          checks:
+            active:
+              http_path: "/health-check/"  # Health check endpoint with trailing slash
+              healthy:
+                interval: 5
+                successes: 1
+              unhealthy:
+                interval: 5
+                http_failures: 2
+        plugins:
+          proxy-rewrite:
+            regex_uri: ["^/catalog(/.*)?$", "$1"]  # Strip /catalog prefix  
+          limit-req:
+            rate: 500
+            burst: 200
+            key: remote_addr     
+          proxy-timeout:
+            timeout: 30000
+
+      - id: ds-search-route
+        uris:
+          - "/search"
+          - "/search/*"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          - OPTIONS
+        upstream:
+          type: roundrobin
+          scheme: http
+          nodes:
+            "ds-search.hus.svc.cluster.local:8080": 10
+          timeout:
+            connect: 10
+            send: 30
+            read: 30
+          checks:
+            active:
+              http_path: "/health-check"  # Health check endpoint (no trailing slash for search)
+              healthy:
+                interval: 5
+                successes: 1
+              unhealthy:
+                interval: 5
+                http_failures: 2
+        plugins:
+          proxy-rewrite:
+            regex_uri: ["^/search(/.*)?$", "$1"]  # Strip /search prefix
+          limit-req:
+            rate: 500
+            burst: 200
+            key: remote_addr     
+          proxy-timeout:
+            timeout: 30000
+
+    #END

@@ -1,0 +1,11 @@
+defaultNamespace: uva
+dependsOn:
+  - name: nextgen-gitops-uva-services-catalog
+  - name: nextgen-gitops-uva-services-search
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-gateway/helm-charts
+  chart: ds-gateway
+  releaseName: ds-gateway
+  version: 0.1.0-dev.7.support-gateway.fea16365
+  valuesFiles:
+    - values.yaml
