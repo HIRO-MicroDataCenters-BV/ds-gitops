@@ -42,21 +42,7 @@ config:
           nodes:
             "httpbin.org:443": 1
 
-
-
       - id: 2
-        uri: "/anything/*"
-        methods:
-          - GET
-          - POST
-        upstream:
-          type: roundrobin
-          scheme: https
-          nodes:
-            "httpbin.org:443": 1
-
-
-      - id: 3
         uri: "/anything/*"
         methods:
           - GET
