@@ -6,6 +6,6 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-gateway/helm-charts
   chart: ds-gateway
   releaseName: ds-gateway
-  version: 0.1.0-dev.7.support-gateway.fea16365
+  version: 0.1.0-dev.11.develop.2b8fb846
   valuesFiles:
     - values.yaml
