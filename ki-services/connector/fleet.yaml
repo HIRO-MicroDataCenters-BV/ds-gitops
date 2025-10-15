@@ -1,0 +1,8 @@
+defaultNamespace: ki
+helm:
+  chart: ds-connector
+  repo: https://HIRO-MicroDataCenters-BV.github.io/ds-connector-service/helm-charts
+  releaseName: ds-connector
+  version: 0.1.0-dev.134.develop-clients.62e1968e
+  valuesFiles:
+    - values.yaml

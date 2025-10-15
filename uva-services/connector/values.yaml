@@ -1,0 +1,19 @@
+env:
+  - name: CHUNK_SIZE
+    value: "8192" # 8KB chunks
+  - name: MAX_FILE_SIZE
+    value: "10737418240"  # 10GB
+  - name: MAX_FILES_TO_LIST
+    value: "10"  # Limit for number of files to list in directory listings
+  - name: FS_BASE_PATH
+    value: "/data" # Base path for file system operations
+  - name : LOG_LEVEL
+    value: "INFO"
+
+ingress:
+  host: nextgen.hiro-develop.nl
+  
+nodeSelector:
+  role: uva
+
+namespace: uva
