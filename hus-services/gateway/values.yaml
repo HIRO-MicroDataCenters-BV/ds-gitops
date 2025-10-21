@@ -163,7 +163,7 @@ config:
                 http_failures: 2
         plugins:
           proxy-rewrite:
-            regex_uri: ["^/search(/.*)?$", "$1"]  # Strip /search prefix
+            regex_uri: ["^/connector(/.*)?$", "$1"]  # Strip /connector prefix
           limit-req:
             rate: 500
             burst: 200
