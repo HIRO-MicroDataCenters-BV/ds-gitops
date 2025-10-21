@@ -164,6 +164,7 @@ config:
         plugins:
           proxy-rewrite:
             regex_uri: ["^/connector(/.*)?$", "$1"]  # Strip /connector prefix
+            decode_uri: true
           limit-req:
             rate: 500
             burst: 200
