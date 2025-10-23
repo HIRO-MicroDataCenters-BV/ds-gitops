@@ -5,6 +5,6 @@ helm:
   chart: ds-search
   repo: https://hiro-microdatacenters-bv.github.io/ds-search-service/helm-charts
   releaseName: ds-search
-  version: 0.2.2-dev.7.daemonset-to-dep.25296d58
+  version: 0.2.2-dev.10.chart-cleaning.0373d39d
   valuesFiles:
     - values.yaml
