@@ -7,6 +7,6 @@ ingress:
   host: nextgen.hiro-develop.nl
 
 backend:
-  catalogName: "UVA Catalog"
-  searchServiceURL: https://ds-search.uva.nextgen.hiro-develop.nl
-  catalogServiceURL: https://ds-catalog.uva.nextgen.hiro-develop.nl
+  catalogName: "uva_catalog"
+  searchServiceURL: https://ds-gateway.uva.nextgen.hiro-develop.nl/search
+  catalogServiceURL: https://ds-gateway.uva.nextgen.hiro-develop.nl/catalog
