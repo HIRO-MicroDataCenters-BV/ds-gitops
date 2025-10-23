@@ -7,6 +7,6 @@ ingress:
   host: nextgen.hiro-develop.nl
 
 backend:
-  catalogName: "KI Catalog"
-  searchServiceURL: https://ds-search.ki.nextgen.hiro-develop.nl
-  catalogServiceURL: https://ds-catalog.ki.nextgen.hiro-develop.nl
+  catalogName: "ki_catalog"
+  searchServiceURL: https://ds-gateway.ki.nextgen.hiro-develop.nl/search
+  catalogServiceURL: https://ds-gateway.ki.nextgen.hiro-develop.nl/catalog
