@@ -10,3 +10,4 @@ backend:
   catalogName: "ki_catalog"
   searchServiceURL: https://ds-gateway.ki.nextgen.hiro-develop.nl/search
   catalogServiceURL: https://ds-gateway.ki.nextgen.hiro-develop.nl/catalog
+  connectorServiceURL: https://ds-connector.hus.nextgen.hiro-develop.nl/dataproducts
