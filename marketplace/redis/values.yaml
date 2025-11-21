@@ -1,0 +1,20 @@
+env: 
+  - name: REDIS_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: redis-credentials
+        key: username
+  - name: REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: redis-credentials
+        key: password
+  - name: REDIS_MAXMEMORY
+    value: "768mb"
+  - name: REDIS_MAXMEMORY_POLICY
+    value: "allkeys-lru"
+
+nodeSelector:
+  role: marketplace
+
+namespace: marketplace
