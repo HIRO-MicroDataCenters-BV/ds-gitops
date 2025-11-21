@@ -3,6 +3,6 @@ helm:
   chart: redis-repository
   repo: https://hiro-microdatacenters-bv.github.io/redis-k8s-minimal/helm-charts
   releaseName: redis-repository
-  version: 0.1.0-dev.2.helm-chart.56418491
+  version: 0.1.0-dev.3.helm-chart.baf7c424
   valuesFiles:
     - values.yaml
