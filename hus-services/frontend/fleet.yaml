@@ -3,6 +3,6 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/nextgen-fe/helm-charts
   chart: app
   releaseName: ds-frontend-hus
-  version: 0.1.1-dev.32.dev-forms.997ff85a
+  version: 0.1.1-dev.35.dev-forms.b696530d
   valuesFiles:
     - values.yaml
