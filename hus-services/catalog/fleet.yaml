@@ -5,6 +5,6 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-catalog/helm-charts
   chart: ds-catalog
   releaseName: ds-catalog
-  version:  0.2.2-dev.94.develop.86e2e8fa
+  version:  0.2.2-dev.98.develop.1d39ea5c
   valuesFiles:
     - values.yaml
