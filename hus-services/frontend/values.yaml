@@ -11,3 +11,6 @@ backend:
   searchServiceURL: https://ds-gateway.hus.nextgen.hiro-develop.nl/search
   catalogServiceURL: https://ds-gateway.hus.nextgen.hiro-develop.nl/catalog
   connectorServiceURL: https://ds-connector.hus.nextgen.hiro-develop.nl/dataproducts
+  trainingBuilderServiceURL: https://dashboard.cog.hiro-develop.nl/apidev
+  cogUrl: https://dashboard.cog.hiro-develop.nl/uidev/
+  apiCogUrl: https://dashboard.cog.hiro-develop.nl/apidev
