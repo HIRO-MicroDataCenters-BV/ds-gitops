@@ -10,7 +10,7 @@ backend:
   catalogName: "uva_catalog"
   searchServiceURL: https://ds-gateway.uva.nextgen.hiro-develop.nl/search
   catalogServiceURL: https://ds-gateway.uva.nextgen.hiro-develop.nl/catalog
-  connectorServiceURL: https://ds-connector.hus.nextgen.hiro-develop.nl/dataproducts
+  connectorServiceURL: https://ds-connector.uva.nextgen.hiro-develop.nl/dataproducts
   trainingBuilderServiceURL: https://dashboard.cog.hiro-develop.nl/apidev
   cogURL: https://dashboard.cog.hiro-develop.nl/uidev/
   apiCogURL: https://dashboard.cog.hiro-develop.nl/apidev
