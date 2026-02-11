@@ -9,7 +9,15 @@ env:
     value: "/data" # Base path for file system operations
   - name : LOG_LEVEL
     value: "INFO"
-
+  - name: S3_BUCKET_NAME
+    value: "connector-testing-data"
+  - name: S3_REGION
+    value: "us-east-1"
+  - name: S3_PREFIX
+    value: "data/"
+  - name: S3_ENDPOINT_URL
+    value: "http://mlflow-minio.kubeflow.svc.cluster.local:9000"
+    
 ingress:
   host: nextgen.hiro-develop.nl
   
