@@ -4,7 +4,12 @@ nodeSelector:
   role: hus
 
 ingress:
+  # Fully internal — UI reachable only via kubectl port-forward:
+  #   kubectl -n hus port-forward svc/ds-policy-engine-ui 8080:80
+  enabled: false
   host: ds-policy-engine-ui.hus.nextgen.hiro-develop.nl
 
 config:
-  apiBaseUrl: https://ds-policy-engine.hus.nextgen.hiro-develop.nl
+  # In-cluster DNS (same-namespace short name). The UI's nginx forwards
+  # browser /api/ calls to this address — no public URL exposed.
+  apiBaseUrl: http://ds-policy-engine:8000

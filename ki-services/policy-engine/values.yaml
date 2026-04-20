@@ -4,6 +4,9 @@ nodeSelector:
   role: ki
 
 ingress:
+  # Fully internal — backend reachable only by in-cluster DNS
+  # (ds-policy-engine.ki.svc.cluster.local:8000).
+  enabled: false
   host: ds-policy-engine.ki.nextgen.hiro-develop.nl
 
 cors:
