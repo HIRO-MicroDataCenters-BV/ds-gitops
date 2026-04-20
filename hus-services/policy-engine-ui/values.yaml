@@ -9,7 +9,12 @@ ingress:
   enabled: false
   host: ds-policy-engine-ui.hus.nextgen.hiro-develop.nl
 
+backend:
+  # Option B: UI's nginx reverse-proxies /api, /health, /docs to this URL.
+  # Same-namespace short name resolves via Kubernetes DNS inside the pod.
+  url: http://ds-policy-engine:8000
+
+# Keep empty — Option B uses same-origin. Set to an absolute URL only if you
+# want the browser to call a different backend directly, bypassing the proxy.
 config:
-  # In-cluster DNS (same-namespace short name). The UI's nginx forwards
-  # browser /api/ calls to this address — no public URL exposed.
-  apiBaseUrl: http://ds-policy-engine:8000
+  apiBaseUrl: ""

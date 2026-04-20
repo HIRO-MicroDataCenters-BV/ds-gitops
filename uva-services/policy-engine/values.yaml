@@ -9,8 +9,11 @@ ingress:
   enabled: false
   host: ds-policy-engine.uva.nextgen.hiro-develop.nl
 
+# Option B: UI talks to backend same-origin via its nginx proxy — no browser
+# ever hits this backend directly, so no CORS allowlist needed. Kept empty as
+# a knob in case a second UI/client origin ever needs direct access.
 cors:
-  allowedOrigins: "https://ds-policy-engine-ui.uva.nextgen.hiro-develop.nl"
+  allowedOrigins: ""
 
 docs:
   enabled: false
