@@ -3,6 +3,6 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/nextgen-fe/helm-charts
   chart: app
   releaseName: ds-frontend-uva
-  version: 0.1.1-dev.153.dev-editor.7f94ec2f
+  version: 0.1.1-dev.154.dev-editor.55e3963a
   valuesFiles:
     - values.yaml
