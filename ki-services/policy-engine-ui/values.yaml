@@ -1,0 +1,10 @@
+namespace: ki
+
+nodeSelector:
+  role: ki
+
+ingress:
+  host: ds-policy-engine-ui.ki.nextgen.hiro-develop.nl
+
+config:
+  apiBaseUrl: http://ds-policy-engine.ki.nextgen.hiro-develop.nl

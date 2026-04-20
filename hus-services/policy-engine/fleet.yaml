@@ -1,0 +1,9 @@
+defaultNamespace: hus
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-policy-engine/helm-charts
+  chart: ds-policy-engine
+  releaseName: ds-policy-engine
+  # TODO: bump to the actual chart version after ds-policy-engine CI publishes it to gh-pages.
+  version: 0.1.0-dev.0.develop.PLACEHOLDER
+  valuesFiles:
+    - values.yaml

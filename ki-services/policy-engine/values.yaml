@@ -1,0 +1,24 @@
+namespace: ki
+
+nodeSelector:
+  role: ki
+
+ingress:
+  host: ds-policy-engine.ki.nextgen.hiro-develop.nl
+
+cors:
+  allowedOrigins: "http://ds-policy-engine-ui.ki.nextgen.hiro-develop.nl"
+
+docs:
+  enabled: false
+
+opa:
+  enabled: true
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+env:
+  logLevel: INFO
+  nodeName: ki

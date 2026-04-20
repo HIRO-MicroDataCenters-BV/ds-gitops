@@ -1,0 +1,24 @@
+namespace: uva
+
+nodeSelector:
+  role: uva
+
+ingress:
+  host: ds-policy-engine.uva.nextgen.hiro-develop.nl
+
+cors:
+  allowedOrigins: "http://ds-policy-engine-ui.uva.nextgen.hiro-develop.nl"
+
+docs:
+  enabled: false
+
+opa:
+  enabled: true
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+env:
+  logLevel: INFO
+  nodeName: uva
