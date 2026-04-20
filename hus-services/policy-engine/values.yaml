@@ -4,20 +4,24 @@ nodeSelector:
   role: hus
 
 ingress:
-  # Fully internal — backend reachable only by in-cluster DNS
-  # (ds-policy-engine.hus.svc.cluster.local:8000).
-  enabled: false
+  # TEMP: enabled for now while there's no sensitive data and no shared
+  # gateway yet. Flip to false once ds-gateway fronts the service.
+  enabled: true
   host: ds-policy-engine.hus.nextgen.hiro-develop.nl
 
-# Option B: UI talks to backend same-origin via its nginx proxy — no browser
-# ever hits this backend directly, so no CORS allowlist needed. Kept empty as
-# a knob in case a second UI/client origin ever needs direct access.
+# With Option B the UI calls the backend same-origin through its nginx proxy,
+# so no browser ever hits this backend directly and CORS is not needed.
 cors:
   allowedOrigins: ""
 
+# Disable Swagger UI in production (hides /docs, /redoc, /openapi.json).
+# Flip to true on dev sites if you want to poke the API from a browser.
 docs:
   enabled: false
 
+# OPA (Open Policy Agent) runs as a sidecar inside the policy-engine pod
+# and evaluates the compiled Rego rules at request time. Keep on — the
+# backend depends on it.
 opa:
   enabled: true
 
@@ -27,4 +31,4 @@ persistence:
 
 env:
   logLevel: INFO
-  nodeName: hus
+  # DS__NODE_NAME intentionally omitted — chart defaults it to the namespace.

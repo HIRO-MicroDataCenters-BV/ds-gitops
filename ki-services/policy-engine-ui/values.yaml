@@ -4,17 +4,16 @@ nodeSelector:
   role: ki
 
 ingress:
-  # Fully internal — UI reachable only via kubectl port-forward:
-  #   kubectl -n ki port-forward svc/ds-policy-engine-ui 8080:80
-  enabled: false
+  # TEMP: enabled while there's no sensitive data and no shared gateway yet.
+  # Flip to false once ds-gateway fronts the UI.
+  enabled: true
   host: ds-policy-engine-ui.ki.nextgen.hiro-develop.nl
 
 backend:
-  # Option B: UI's nginx reverse-proxies /api, /health, /docs to this URL.
-  # Same-namespace short name resolves via Kubernetes DNS inside the pod.
+  # Option B: UI's in-pod nginx reverse-proxies /api, /health, /docs to this
+  # URL. Same-namespace short name resolves via Kubernetes DNS inside the pod
+  # — no public backend URL is ever exposed to the browser.
   url: http://ds-policy-engine:8000
 
-# Keep empty — Option B uses same-origin. Set to an absolute URL only if you
-# want the browser to call a different backend directly, bypassing the proxy.
-config:
-  apiBaseUrl: ""
+# config.apiBaseUrl is intentionally omitted — the chart default is "" which
+# means "same-origin via nginx proxy", which is what every site wants today.
