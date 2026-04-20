@@ -7,7 +7,7 @@ ingress:
   host: ds-policy-engine.uva.nextgen.hiro-develop.nl
 
 cors:
-  allowedOrigins: "http://ds-policy-engine-ui.uva.nextgen.hiro-develop.nl"
+  allowedOrigins: "https://ds-policy-engine-ui.uva.nextgen.hiro-develop.nl"
 
 docs:
   enabled: false

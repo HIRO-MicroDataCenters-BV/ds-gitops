@@ -7,4 +7,4 @@ ingress:
   host: ds-policy-engine-ui.ki.nextgen.hiro-develop.nl
 
 config:
-  apiBaseUrl: http://ds-policy-engine.ki.nextgen.hiro-develop.nl
+  apiBaseUrl: https://ds-policy-engine.ki.nextgen.hiro-develop.nl
