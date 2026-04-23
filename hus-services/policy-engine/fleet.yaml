@@ -1,0 +1,9 @@
+defaultNamespace: hus
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-policy-engine/helm-charts
+  chart: ds-policy-engine
+  releaseName: ds-policy-engine
+  # Exact pin — see ki-services/policy-engine/fleet.yaml for how to bump.
+  version: 0.1.0-dev.15.develop.646f7754
+  valuesFiles:
+    - values.yaml

@@ -16,6 +16,12 @@ This repository contains GitOps configurations for deploying and managing DS mic
 - **Frontend**
   The frontend is the user interface of the NextGen Node that allows users to access and interact with its features.
 
+- **Policy Engine**
+  Standalone policy-as-code microservice (FastAPI + OPA). Evaluates user permissions based on role and institute. Repo: [ds-policy-engine](https://github.com/HIRO-MicroDataCenters-BV/ds-policy-engine).
+
+- **Policy Engine UI**
+  Static web UI for the Policy Engine (nginx). Repo: [ds-policy-engine-ui](https://github.com/HIRO-MicroDataCenters-BV/ds-policy-engine-ui).
+
 ## Structure
 
 - Each service has its own directory containing a `fleet.yaml` file and related Helm values.
