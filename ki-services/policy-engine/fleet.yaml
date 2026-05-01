@@ -7,6 +7,6 @@ helm:
   # when promoting a new build to this site (grab the version from
   # https://hiro-microdatacenters-bv.github.io/ds-policy-engine/helm-charts/index.yaml
   # or https://github.com/HIRO-MicroDataCenters-BV/ds-policy-engine/releases).
-  version: 0.1.0-dev.31.develop.2274bc55
+  version: 0.1.0-dev.32.main.4e830254
   valuesFiles:
     - values.yaml
