@@ -1,0 +1,34 @@
+namespace: uva
+
+nodeSelector:
+  role: uva
+
+ingress:
+  # TEMP: enabled for now while there's no sensitive data and no shared
+  # gateway yet. Flip to false once ds-gateway fronts the service.
+  enabled: true
+  host: ds-policy-engine.uva.nextgen.hiro-develop.nl
+
+# With Option B the UI calls the backend same-origin through its nginx proxy,
+# so no browser ever hits this backend directly and CORS is not needed.
+cors:
+  allowedOrigins: ""
+
+# Disable Swagger UI in production (hides /docs, /redoc, /openapi.json).
+# Flip to true on dev sites if you want to poke the API from a browser.
+docs:
+  enabled: false
+
+# OPA (Open Policy Agent) runs as a sidecar inside the policy-engine pod
+# and evaluates the compiled Rego rules at request time. Keep on — the
+# backend depends on it.
+opa:
+  enabled: true
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+env:
+  logLevel: INFO
+  # DS__NODE_NAME intentionally omitted — chart defaults it to the namespace.

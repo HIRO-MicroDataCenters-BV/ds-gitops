@@ -1,0 +1,37 @@
+namespace: ki
+
+nodeSelector:
+  role: ki
+
+ingress:
+  # TEMP: enabled for now while there's no sensitive data and no shared
+  # gateway yet. Flip to false once ds-gateway fronts the service (or any
+  # time we need to make policy-engine fully internal).
+  enabled: true
+  host: ds-policy-engine.ki.nextgen.hiro-develop.nl
+
+# With Option B the UI calls the backend same-origin through its nginx proxy,
+# so no browser ever hits this backend directly and CORS is not needed. Kept
+# as an explicit empty knob in case a second origin ever needs direct access.
+cors:
+  allowedOrigins: ""
+
+# Disable Swagger UI in production (hides /docs, /redoc, /openapi.json).
+# Flip to true on dev sites if you want to poke the API from a browser.
+docs:
+  enabled: false
+
+# OPA (Open Policy Agent) runs as a sidecar inside the policy-engine pod
+# and evaluates the compiled Rego rules at request time. Keep on — the
+# backend depends on it.
+opa:
+  enabled: true
+
+persistence:
+  enabled: true
+  size: 1Gi
+
+env:
+  logLevel: INFO
+  # DS__NODE_NAME intentionally omitted — the chart defaults it to the
+  # release namespace (ki/hus/uva), so setting it here would duplicate.

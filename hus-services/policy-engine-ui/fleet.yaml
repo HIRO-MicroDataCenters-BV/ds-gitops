@@ -1,0 +1,11 @@
+defaultNamespace: hus
+dependsOn:
+  - name: nextgen-gitops-hus-services-policy-engine
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-policy-engine-ui/helm-charts
+  chart: ds-policy-engine-ui
+  releaseName: ds-policy-engine-ui
+  # Exact pin — see ki-services/policy-engine-ui/fleet.yaml for how to bump.
+  version: 0.1.0-dev.11.develop.3c2ccdb0
+  valuesFiles:
+    - values.yaml
