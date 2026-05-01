@@ -4,6 +4,6 @@ helm:
   chart: ds-policy-engine
   releaseName: ds-policy-engine
   # Exact pin — see ki-services/policy-engine/fleet.yaml for how to bump.
-  version: 0.1.0-dev.32.main.4e830254
+  version: 0.1.0-dev.35.main.3a11d6c1
   valuesFiles:
     - values.yaml
