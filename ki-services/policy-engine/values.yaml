@@ -16,10 +16,11 @@ ingress:
 cors:
   allowedOrigins: ""
 
-# Disable Swagger UI in production (hides /docs, /redoc, /openapi.json).
-# Flip to true on dev sites if you want to poke the API from a browser.
+# Swagger UI is on by default — /docs, /redoc, /openapi.json are reachable.
+# Will be flipped off explicitly later (e.g. once ds-gateway fronts the service
+# or the API surface goes sensitive). Until then, leave on.
 docs:
-  enabled: false
+  enabled: true
 
 # OPA (Open Policy Agent) runs as a sidecar inside the policy-engine pod
 # and evaluates the compiled Rego rules at request time. Keep on — the
