@@ -8,6 +8,6 @@ helm:
   # Exact pin — Fleet only rolls out when this string changes. Bump deliberately
   # when promoting a new UI build (grab from
   # https://hiro-microdatacenters-bv.github.io/ds-policy-engine-ui/helm-charts/index.yaml).
-  version: 0.1.0-dev.11.develop.3c2ccdb0
+  version: 0.1.0-dev.12.main.c2d11c84
   valuesFiles:
     - values.yaml
