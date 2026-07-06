@@ -1,0 +1,9 @@
+defaultNamespace: hus
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-contract-engine/helm-charts/contract-generator
+  chart: ds-contract-generator
+  releaseName: ds-contract-generator
+  # Exact pin — bump this to the latest version from gh-pages index.yaml
+  version: 0.1.0-dev.8.develop.b21b22f2
+  valuesFiles:
+    - values.yaml
