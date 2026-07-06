@@ -4,6 +4,6 @@ helm:
   chart: ds-contract-generator
   releaseName: ds-contract-generator
   # Exact pin — bump this to the latest version from gh-pages index.yaml
-  version: 0.1.0-dev.8.develop.b21b22f2
+  version: 0.1.0-dev.9.develop.05cead5b
   valuesFiles:
     - values.yaml
