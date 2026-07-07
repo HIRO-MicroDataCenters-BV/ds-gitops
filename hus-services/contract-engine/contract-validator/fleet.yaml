@@ -4,6 +4,6 @@ helm:
   chart: ds-contract-validator
   releaseName: ds-contract-validator
   # Exact pin — bump this to the latest version from gh-pages index.yaml
-  version: 0.1.0-dev.8.develop.b21b22f2
+  version: 0.1.0-dev.12.main.af108552
   valuesFiles:
     - values.yaml
