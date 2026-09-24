@@ -1,0 +1,8 @@
+defaultNamespace: hus
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-contract-engine/helm-charts/contract-validator
+  chart: ds-contract-validator
+  releaseName: ds-contract-validator
+  version: 0.1.0-dev.8.develop.b21b22f2
+  valuesFiles:
+    - values.yaml

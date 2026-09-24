@@ -1,0 +1,14 @@
+namespace: hus
+
+nodeSelector:
+  role: hus
+
+clearingHouseStub:
+  logLevel: "INFO"
+  environment: "production"
+
+ingress:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
