@@ -22,6 +22,12 @@ This repository contains GitOps configurations for deploying and managing DS mic
 - **Policy Engine UI**
   Static web UI for the Policy Engine (nginx). Repo: [ds-policy-engine-ui](https://github.com/HIRO-MicroDataCenters-BV/ds-policy-engine-ui).
 
+- **Contract Engine**
+  Pair of stateless FastAPI services that mint and validate VC-JWT contracts for federated data access. `ds-contract-generator` (DS-306) signs per-node contracts for selected catalog items; `ds-contract-validator` (DS-307) verifies tokens before the Connector fetches data. Repo: [ds-contract-engine](https://github.com/HIRO-MicroDataCenters-BV/ds-contract-engine).
+
+- **Clearing House Stub** *(transitional)*
+  In-memory contract registry used by Contract Engine for end-to-end testing. Will be removed once the real Clearing House service exists — `ds-contract-{generator,validator}` then just change their `clearingHouseUrl`. Lives in the [ds-contract-engine](https://github.com/HIRO-MicroDataCenters-BV/ds-contract-engine) repo.
+
 ## Structure
 
 - Each service has its own directory containing a `fleet.yaml` file and related Helm values.

@@ -1,0 +1,11 @@
+defaultNamespace: ki
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-contract-engine/helm-charts/clearing-house-stub
+  chart: ds-clearing-house-stub
+  releaseName: ds-clearing-house-stub
+  # NOTE: in-memory throw-away service. Will be removed and replaced
+  # by the real Clearing House when that lands; ds-contract-{generator,
+  # validator} just change their clearingHouseUrl at that point.
+  version: 0.1.0-dev.8.develop.b21b22f2
+  valuesFiles:
+    - values.yaml

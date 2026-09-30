@@ -1,0 +1,14 @@
+namespace: uva
+
+nodeSelector:
+  role: uva
+
+clearingHouseStub:
+  logLevel: "INFO"
+  environment: "production"
+
+ingress:
+  enabled: false
+
+serviceMonitor:
+  enabled: false

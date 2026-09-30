@@ -1,0 +1,35 @@
+namespace: hus
+
+nodeSelector:
+  role: hus
+
+contractGenerator:
+  # Real node identity for this site. Used as iss, aud and as the host
+  # that item-URL ownership checks compare against.
+  nodeId: "hus.nextgen.hiro-develop.nl"
+  signingKeyId: "hus.nextgen.hiro-develop.nl#key-1"
+  # In-cluster URL of the per-node Clearing House stub (same namespace).
+  clearingHouseUrl: "http://ds-clearing-house-stub:8084"
+  signingKeyPath: "/keys/ed25519.pem"
+  defaultTtlSeconds: 3600
+  maxItemsPerContract: 50
+  environment: "production"
+  logLevel: "INFO"
+
+# Signing-key Secret. For initial deployment leave disabled so the
+# Generator auto-generates an Ed25519 key on first start (key is
+# regenerated on pod restart — fine for dev, not for prod). To switch
+# to a real key, set enabled: true and pre-create the Secret named
+# below via deploy/scripts/generate-signing-key.sh in ds-contract-engine.
+signingKeySecret:
+  enabled: false
+  name: "ds-contract-generator-signing-key"
+  mountPath: "/keys"
+
+# JWKS needs to be reachable by the local Validator only in v1, so
+# keep ingress off. Flip on later if cross-node validation lands.
+ingress:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
