@@ -1,0 +1,59 @@
+# HUS credential-issuer deploy.
+# Mints ACDCs bound to subject AIDs and wraps them as IPEX grants that
+# ds-login's AcdcVerifier reads under the open-federation model.
+
+image:
+  tag: "develop"
+  pullPolicy: Always
+
+ingress:
+  enabled: true
+  className: nginx
+  host: ds-credential-issuer.hus.nextgen.hiro-develop.nl
+  tls:
+    enabled: true
+    secretName: ds-credential-issuer-tls
+
+issuer:
+  # Habitat alias — becomes the KERIpy habery name on first boot.
+  name: hus-issuer
+
+  # Where KERIpy stores the LMDB keystore. The PVC below mounts here.
+  haberyPath: /var/lib/ds-credential-issuer/keystore
+
+  # Point the issuer at HUS's own DKMS stack. In-cluster Service DNS —
+  # these match ds-dkms chart Service names in the hus namespace.
+  witnessUrls:
+    - http://ds-dkms-witness:3232
+  # OOBI the verifier (ds-login) uses to resolve this issuer's KEL — the
+  # externally-reachable witness URL + the witness AID (added after first
+  # boot). The {idx} path is per-pod; witness 1 is pod 0 in the chart.
+  witnessOobis:
+    # TODO: replace <witness-AID> after first boot of ds-dkms-witness-0
+    - https://dkms-witness-1.hus.nextgen.hiro-develop.nl/oobi/<witness-AID>
+  mesagkestoUrl: http://ds-dkms-mesagkesto:8081
+  inceptionThreshold: 1
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessModes: ["ReadWriteOnce"]
+  size: 2Gi
+  mountPath: /var/lib/ds-credential-issuer
+
+env:
+  DS__ENVIRONMENT: production
+  DS__LOG_LEVEL: INFO
+  # Database for the schema registry (local sqlite inside the PVC).
+  DS__DATABASE_URL: "sqlite+aiosqlite:////var/lib/ds-credential-issuer/schemas.db"
+
+# ds-auth middleware — gated by DS__AUTH__ENABLED. Enable once ds-login
+# is deployed and issuing JWTs that this service's permission checks can
+# consume. Mutations require issuer:write, admin requires issuer:admin.
+auth:
+  enabled: true
+  jwksUrl: http://ds-login:8080/.well-known/jwks.json
+  policyEngineUrl: http://ds-policy-engine:8000
+
+nodeSelector:
+  role: hus
