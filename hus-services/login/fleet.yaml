@@ -1,0 +1,13 @@
+defaultNamespace: hus
+dependsOn:
+  # Needs DKMS up — ds-login resolves issuer KELs from the OOBIs embedded
+  # in each incoming IPEX grant, and in the dev-fallback path (challenge
+  # liveness probe) it pings this site's keriox watcher.
+  - name: dkms
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-login
+  chart: ds-login
+  releaseName: ds-login
+  version: 0.1.2
+  valuesFiles:
+    - values.yaml

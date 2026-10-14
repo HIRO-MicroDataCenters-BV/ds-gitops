@@ -1,0 +1,64 @@
+# HUS single-site DKMS deploy.
+#
+# Shape for M36 December 2026 demo: 1 witness + 1 watcher + mesagkesto in
+# the hus namespace at *.hus.nextgen.hiro-develop.nl. Scale witnesses up
+# (and rotate every AID) when we federate beyond HUS.
+#
+# Seeds (dkms-witness-seeds / dkms-watcher-seed / dkms-mesagkesto-seed)
+# are provisioned out-of-band in the hus namespace as SealedSecret
+# manifests — see dkms/SEEDS.md.
+
+baseDomain: hus.nextgen.hiro-develop.nl
+
+witness:
+  enabled: true
+  replicaCount: 1
+  seedSecretName: dkms-witness-seeds
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 1Gi
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    tls:
+      enabled: true
+      secretNamePattern: "dkms-witness-{idx}-tls"
+  nodeSelector:
+    role: hus
+
+watcher:
+  enabled: true
+  seedSecretName: dkms-watcher-seed
+  # Replaced after first boot: once the witness's AID is known the
+  # operator records its OOBI here so the watcher subscribes on restart.
+  initialOobis: []
+  persistence:
+    enabled: true
+    size: 1Gi
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    tls:
+      enabled: true
+      secretName: dkms-watcher-tls
+  nodeSelector:
+    role: hus
+
+mesagkesto:
+  enabled: true
+  seedSecretName: dkms-mesagkesto-seed
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    tls:
+      enabled: true
+      secretName: dkms-mesagkesto-tls
+  nodeSelector:
+    role: hus

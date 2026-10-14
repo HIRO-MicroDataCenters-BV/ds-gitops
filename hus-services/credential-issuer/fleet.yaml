@@ -1,0 +1,12 @@
+defaultNamespace: hus
+dependsOn:
+  # Needs DKMS up (witness + watcher + mesagkesto) before the issuer
+  # can anchor its own inception event and resolve subject AIDs.
+  - name: dkms
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-credential-issuer
+  chart: ds-credential-issuer
+  releaseName: ds-credential-issuer
+  version: 0.1.0
+  valuesFiles:
+    - values.yaml
