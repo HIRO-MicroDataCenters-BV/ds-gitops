@@ -4,6 +4,11 @@
 # the caller is allowed to do; the service's own admin surface (/rules etc.)
 # is gated by ds-auth when DS__AUTH_ENABLED=true.
 
+namespace: hus
+
+nodeSelector:
+  role: hus
+
 replicaCount: 1
 
 image:
@@ -17,6 +22,8 @@ service:
   port: 8000
 
 ingress:
+  # TEMP: enabled while there's no sensitive data and no shared gateway yet.
+  # Flip to false once ds-gateway fronts the service.
   enabled: true
   className: nginx
   annotations:
@@ -37,11 +44,16 @@ persistence:
 
 env:
   logLevel: INFO
-  nodeName: hus
+  # DS__NODE_NAME intentionally omitted — chart defaults it to the namespace.
 
+# With Option B the UI calls the backend same-origin through its nginx proxy,
+# so no browser ever hits this backend directly and CORS is not needed.
 cors:
   allowedOrigins: ""
 
+# Swagger UI is on by default — /docs, /redoc, /openapi.json are reachable.
+# Will be flipped off explicitly later (e.g. once ds-gateway fronts the
+# service or the API surface goes sensitive). Until then, leave on.
 docs:
   enabled: true
 
@@ -49,14 +61,14 @@ dbQuery:
   # /api/v1/db/query is a data-exfiltration surface. Keep OFF in prod.
   enabled: false
 
+# OPA (Open Policy Agent) runs as a sidecar inside the policy-engine pod
+# and evaluates the compiled Rego rules at request time. Keep on — the
+# backend depends on it.
 opa:
   enabled: true
   image:
     repository: openpolicyagent/opa
     tag: "1.2.0"
-
-nodeSelector:
-  role: hus
 
 # ds-auth wiring injected as extra env — the chart doesn't template these
 # directly (yet), so we use the extraEnv escape hatch. Default DISABLED

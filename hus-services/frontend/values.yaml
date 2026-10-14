@@ -7,6 +7,10 @@ ingress:
   host: nextgen.hiro-develop.nl
 
 backend:
-  catalogName: "HUS Catalog"
-  searchServiceURL: https://ds-search.hus.nextgen.hiro-develop.nl
-  catalogServiceURL: https://ds-catalog.hus.nextgen.hiro-develop.nl
+  catalogName: "hus_catalog"
+  searchServiceURL: https://ds-gateway.hus.nextgen.hiro-develop.nl/search
+  catalogServiceURL: https://ds-gateway.hus.nextgen.hiro-develop.nl/catalog
+  connectorServiceURL: https://ds-connector.hus.nextgen.hiro-develop.nl
+  trainingBuilderServiceURL: https://dashboard.cog.hiro-develop.nl/apidev
+  cogURL: https://dashboard.cog.hiro-develop.nl/uidev/
+  apiCogURL: https://dashboard.cog.hiro-develop.nl/apidev

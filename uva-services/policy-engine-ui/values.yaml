@@ -1,0 +1,18 @@
+namespace: uva
+
+nodeSelector:
+  role: uva
+
+ingress:
+  # TEMP: enabled while there's no sensitive data and no shared gateway yet.
+  # Flip to false once ds-gateway fronts the UI.
+  enabled: true
+  host: ds-policy-engine-ui.uva.nextgen.hiro-develop.nl
+
+backend:
+  # Option B: UI's in-pod nginx reverse-proxies /api, /health, /docs to this
+  # URL. Same-namespace short name resolves via Kubernetes DNS inside the pod.
+  url: http://ds-policy-engine:8000
+
+# config.apiBaseUrl is intentionally omitted — chart default "" means
+# same-origin via nginx proxy, which is what every site wants today.

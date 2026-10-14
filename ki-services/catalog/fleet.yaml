@@ -1,10 +1,10 @@
 defaultNamespace: ki
 dependsOn:
-  - name: neo4j
+  - name: nextgen-gitops-ki-services-neo4j
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-catalog/helm-charts
   chart: ds-catalog
   releaseName: ds-catalog
-  version: 0.2.2-dev.6.daemonset-to-dep.c851b1f2
+  version: 0.2.2-dev.114.develop.60fa42a7
   valuesFiles:
     - values.yaml

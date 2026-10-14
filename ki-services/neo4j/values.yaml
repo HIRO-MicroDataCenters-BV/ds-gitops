@@ -40,5 +40,12 @@ neo4j:
       cpu: "4"
 
 
+services:
+  neo4j:
+    spec:
+      type: ClusterIP
+
+nodeSelector: {}
+
 nodeSelector:
   role: ki

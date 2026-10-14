@@ -1,0 +1,10 @@
+defaultNamespace: marketplace
+dependsOn:
+  - name: nextgen-gitops-marketplace-redis
+helm:
+  chart: ds-checkout
+  repo: https://HIRO-MicroDataCenters-BV.github.io/ds-checkout/helm-charts
+  releaseName: ds-checkout
+  version: 0.1.0-dev.14.checkout-endpoin.135e6128
+  valuesFiles:
+    - values.yaml
