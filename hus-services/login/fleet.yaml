@@ -8,6 +8,6 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-login
   chart: ds-login
   releaseName: ds-login
-  version: 0.1.1
+  version: 0.1.2
   valuesFiles:
     - values.yaml

@@ -35,10 +35,13 @@ jwt:
   issuer: ds-login
   audience: hiro-services
   ttlSeconds: 900
-  # Secret must exist in the hus namespace with field 'private.pem' holding
-  # a PKCS8-encoded RSA private key. Generate once per site; see
-  # scripts/generate-ds-login-signing-key.sh.
-  signingKeySecretName: ds-login-signing-key
+  # DEMO MODE — empty signingKeySecretName makes chart 0.1.2+ fall through
+  # to ds-login's transient-key path (RSA key generated in memory per pod
+  # start). Every pod restart invalidates every active JWT; acceptable for
+  # the M36 demo. For production, run scripts/generate-ds-login-signing-key.sh
+  # once with cluster context, commit sealed-ds-login-signing-key.yaml, and
+  # set signingKeySecretName: "ds-login-signing-key" here.
+  signingKeySecretName: ""
   signingKeySecretField: private.pem
 
 environment: production
