@@ -1,0 +1,48 @@
+# HUS ds-login deploy.
+# Issues short-lived RS256 JWTs after verifying a user's challenge signature
+# + their presented IPEX credential grant. The JWTs are consumed by every
+# other ds-* service via ds-auth.
+
+image:
+  tag: "0.1.1"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: nginx
+  host: ds-login.hus.nextgen.hiro-develop.nl
+  tls:
+    enabled: true
+    secretName: ds-login-tls
+
+# Point at HUS's DKMS stack. In-cluster Service DNS — matches ds-dkms
+# chart service names in the hus namespace.
+# Watcher is used for liveness probing at /login/challenge; witnesses are a
+# fallback path. The main verify flow pulls OOBIs from each incoming grant,
+# not from this static list.
+dkms:
+  watcherUrl: http://ds-dkms-watcher:3235
+  witnessUrls:
+    - http://ds-dkms-witness:3232
+
+jwt:
+  issuer: ds-login
+  audience: hiro-services
+  ttlSeconds: 900
+  # Secret must exist in the hus namespace with field 'private.pem' holding
+  # a PKCS8-encoded RSA private key. Generate once per site; see
+  # scripts/generate-ds-login-signing-key.sh.
+  signingKeySecretName: ds-login-signing-key
+  signingKeySecretField: private.pem
+
+environment: production
+logLevel: INFO
+
+nodeSelector:
+  role: hus

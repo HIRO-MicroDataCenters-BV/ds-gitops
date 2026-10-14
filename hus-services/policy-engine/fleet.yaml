@@ -1,0 +1,11 @@
+defaultNamespace: hus
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-policy-engine/helm-charts
+  chart: ds-policy-engine
+  releaseName: ds-policy-engine
+  # Latest develop-based build that includes the ds-auth integration
+  # (0.1.0-dev.37.main.492e9d5b was built from the develop→main release
+  # merge of PR #4). Bump on new develop builds.
+  version: 0.1.0-dev.37.main.492e9d5b
+  valuesFiles:
+    - values.yaml
