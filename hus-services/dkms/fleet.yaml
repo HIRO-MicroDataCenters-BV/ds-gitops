@@ -1,0 +1,8 @@
+defaultNamespace: hus
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-dkms
+  chart: ds-dkms
+  releaseName: ds-dkms
+  version: 0.1.0
+  valuesFiles:
+    - values.yaml
