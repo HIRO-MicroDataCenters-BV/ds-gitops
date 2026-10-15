@@ -21,19 +21,11 @@ service:
   type: ClusterIP
   port: 8000
 
+# No per-service ingress — the shared ds-gateway (APISIX) fronts this
+# service via a /policy-engine/* route. See hus-services/gateway/values.yaml.
+# Public URL: https://ds-gateway.hus.nextgen.hiro-develop.nl/policy-engine/
 ingress:
-  # TEMP: enabled while there's no sensitive data and no shared gateway yet.
-  # Flip to false once ds-gateway fronts the service.
-  enabled: true
-  className: nginx
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-  host: ds-policy-engine.hus.nextgen.hiro-develop.nl
-  path: /
-  pathType: Prefix
-  tls:
-    enabled: true
-    secretName: ds-policy-engine-tls
+  enabled: false
 
 persistence:
   enabled: true

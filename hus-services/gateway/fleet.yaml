@@ -2,6 +2,11 @@ defaultNamespace: hus
 dependsOn:
   - name: nextgen-gitops-hus-services-catalog
   - name: nextgen-gitops-hus-services-search
+  # Needed by the new routes below so APISIX's active health checks don't
+  # permanently mark these upstreams unhealthy before the pods exist.
+  - name: nextgen-gitops-hus-services-login
+  - name: nextgen-gitops-hus-services-credential-issuer
+  - name: nextgen-gitops-hus-services-policy-engine
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-gateway/helm-charts
   chart: ds-gateway

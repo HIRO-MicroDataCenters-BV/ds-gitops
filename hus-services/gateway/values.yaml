@@ -168,7 +168,134 @@ config:
           limit-req:
             rate: 500
             burst: 200
-            key: remote_addr     
+            key: remote_addr
+          proxy-timeout:
+            timeout: 30000
+
+      # ─── Identity + auth stack (M36 single-site demo) ───
+
+      - id: ds-login-route
+        uris:
+          - "/login"
+          - "/login/*"
+          # ds-login's JWKs discovery endpoint is served from the root; keep
+          # it reachable at /login/.well-known/jwks.json after the prefix
+          # strip so downstream services can set DS__AUTH__JWKS_URL to the
+          # same URL whether they call it in-cluster or through the gateway.
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          - OPTIONS
+        upstream:
+          type: roundrobin
+          scheme: http
+          nodes:
+            "ds-login.hus.svc.cluster.local:8080": 10
+          timeout:
+            connect: 10
+            send: 30
+            read: 30
+          checks:
+            active:
+              http_path: "/health-check/"
+              healthy:
+                interval: 5
+                successes: 1
+              unhealthy:
+                interval: 5
+                http_failures: 2
+        plugins:
+          proxy-rewrite:
+            regex_uri: ["^/login(/.*)?$", "$1"]  # Strip /login prefix
+          limit-req:
+            # Tighter than catalog — brute-forcing credentials is the attack.
+            rate: 60
+            burst: 30
+            key: remote_addr
+          proxy-timeout:
+            timeout: 30000
+
+      - id: ds-credential-issuer-route
+        uris:
+          - "/credential-issuer"
+          - "/credential-issuer/*"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          - OPTIONS
+        upstream:
+          type: roundrobin
+          scheme: http
+          nodes:
+            "ds-credential-issuer.hus.svc.cluster.local:8080": 10
+          timeout:
+            connect: 10
+            send: 30
+            read: 30
+          checks:
+            active:
+              http_path: "/health-check/"
+              healthy:
+                interval: 5
+                successes: 1
+              unhealthy:
+                interval: 5
+                http_failures: 2
+        plugins:
+          proxy-rewrite:
+            regex_uri: ["^/credential-issuer(/.*)?$", "$1"]  # Strip /credential-issuer prefix
+          limit-req:
+            # Minting ACDCs is a privileged, infrequent operation.
+            rate: 30
+            burst: 15
+            key: remote_addr
+          proxy-timeout:
+            timeout: 30000
+
+      - id: ds-policy-engine-route
+        uris:
+          - "/policy-engine"
+          - "/policy-engine/*"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - PATCH
+          - OPTIONS
+        upstream:
+          type: roundrobin
+          scheme: http
+          nodes:
+            "ds-policy-engine.hus.svc.cluster.local:8000": 10
+          timeout:
+            connect: 10
+            send: 30
+            read: 30
+          checks:
+            active:
+              http_path: "/health"
+              healthy:
+                interval: 5
+                successes: 1
+              unhealthy:
+                interval: 5
+                http_failures: 2
+        plugins:
+          proxy-rewrite:
+            regex_uri: ["^/policy-engine(/.*)?$", "$1"]  # Strip /policy-engine prefix
+          limit-req:
+            # /evaluate is the hot path — every gated request hits it.
+            # Keep the rate catalog-tier.
+            rate: 500
+            burst: 200
+            key: remote_addr
           proxy-timeout:
             timeout: 30000
     #END
