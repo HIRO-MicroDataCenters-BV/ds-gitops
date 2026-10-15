@@ -13,13 +13,11 @@ service:
   type: ClusterIP
   port: 8080
 
+# No per-service ingress — the shared ds-gateway (APISIX) fronts this
+# service via a /login/* route. See hus-services/gateway/values.yaml for
+# the route definition. Public URL: https://ds-gateway.hus.nextgen.hiro-develop.nl/login/
 ingress:
-  enabled: true
-  className: nginx
-  host: ds-login.hus.nextgen.hiro-develop.nl
-  tls:
-    enabled: true
-    secretName: ds-login-tls
+  enabled: false
 
 # Point at HUS's DKMS stack. In-cluster Service DNS — matches ds-dkms
 # chart service names in the hus namespace.
