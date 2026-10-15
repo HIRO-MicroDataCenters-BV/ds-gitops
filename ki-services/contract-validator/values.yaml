@@ -1,0 +1,26 @@
+namespace: ki
+
+nodeSelector:
+  role: ki
+
+contractValidator:
+  # Must equal the Generator's NODE_ID so the audience check passes.
+  nodeId: "ki.nextgen.hiro-develop.nl"
+  clearingHouseUrl: "http://ds-clearing-house-stub:8084"
+  # In-cluster URL of the local Generator's JWKS endpoint. Empty string
+  # would make the Validator derive https://<iss>/.well-known/jwks.json
+  # from the token's iss claim — useful in production once a TLS
+  # ingress exists for each Generator. For now we point at the local
+  # service by DNS name.
+  jwksBaseUrlTemplate: "http://ds-contract-generator:8082"
+  leewaySeconds: 5
+  jwksCacheTtlSeconds: 3600
+  httpTimeoutSeconds: 5.0
+  environment: "production"
+  logLevel: "INFO"
+
+ingress:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
