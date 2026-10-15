@@ -4,7 +4,7 @@
 # other ds-* service via ds-auth.
 
 image:
-  tag: "0.1.1"
+  tag: "0.1.3"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
@@ -13,26 +13,24 @@ service:
   type: ClusterIP
   port: 8080
 
-# ds-login gets BOTH a per-service ingress AND a gateway route. The
-# gateway route (hus-services/gateway/values.yaml, /login/*) covers
-# Hiro-internal callers that already route through APISIX. The per-service
-# ingress gives external verifiers, partner-site federations and
-# standards-based JWT libraries a clean, stable URL for JWKs discovery at
-# https://ds-login.hus.nextgen.hiro-develop.nl/.well-known/jwks.json —
-# the OIDC convention is "/.well-known/jwks.json on the issuer's host",
-# not a prefixed path behind a gateway.
+# Per-service ingress alongside the gateway route. The gateway route
+# (hus-services/gateway/values.yaml, /login/*) covers Hiro-internal callers.
+# The per-service ingress gives external verifiers, partner-site federations
+# and standards-based JWT libraries the OIDC-conventional URL:
+#   https://ds-login.hus.nextgen.hiro-develop.nl/.well-known/jwks.json
 #
-# TLS is inherited from nginx-ingress's default certificate (the wildcard
-# for *.hus.nextgen.hiro-develop.nl served by HUS's ingress controller),
-# so no cert-manager annotation / per-service TLS secret is needed —
-# same pattern as frontend/connector overlays.
+# cert-manager mints a per-host Let's Encrypt cert into
+# `ds-login-tls-secret` (requires chart 0.1.3+ for annotations support).
+# Same pattern as ds-policy-engine.
 ingress:
   enabled: true
   className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   host: ds-login.hus.nextgen.hiro-develop.nl
   tls:
-    enabled: false
-    secretName: ""
+    enabled: true
+    secretName: ds-login-tls-secret
 
 # Point at HUS's DKMS stack. In-cluster Service DNS — matches ds-dkms
 # chart service names in the hus namespace.
