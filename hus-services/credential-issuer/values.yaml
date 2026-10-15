@@ -6,11 +6,19 @@ image:
   tag: "develop"
   pullPolicy: Always
 
-# No per-service ingress — the shared ds-gateway (APISIX) fronts this
-# service via a /credential-issuer/* route. See hus-services/gateway/
-# values.yaml. Public URL: https://ds-gateway.hus.nextgen.hiro-develop.nl/credential-issuer/
+# Per-service ingress alongside the gateway route. Easier to hit directly
+# during initial testing; gateway route (/credential-issuer/*) remains for
+# consistent Hiro-internal access.
+# Requires chart 0.1.1+ which added annotations support for cert-manager.
 ingress:
-  enabled: false
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  host: ds-credential-issuer.hus.nextgen.hiro-develop.nl
+  tls:
+    enabled: true
+    secretName: ds-credential-issuer-tls-secret
 
 issuer:
   # Habitat alias — becomes the KERIpy habery name on first boot.
