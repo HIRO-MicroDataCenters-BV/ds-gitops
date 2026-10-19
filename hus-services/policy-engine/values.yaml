@@ -14,7 +14,7 @@ replicaCount: 1
 image:
   repository: ghcr.io/hiro-microdatacenters-bv/ds-policy-engine
   # Chart's appVersion sets a sensible default; leave empty to let the chart pick.
-  tag: ""
+  tag: "0.1.0-dev.37.main.492e9d5b"
   pullPolicy: IfNotPresent
 
 service:
