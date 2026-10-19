@@ -63,8 +63,11 @@ mesagkesto:
   publicUrl: "http://dkms-mesagkesto.hus.nextgen.hiro-develop.nl"
   # Real watcher OOBI (eid = watcher's AID). Captured from the hus
   # watcher at first boot — if the watcher is ever re-seeded with a new
-  # AID (rare) this needs to be rotated to match.
-  watcherOobi: '{"eid":"BF2t2NPc1bwptY1hYV0YCib1JjQ11k9jtuaZemecPF5b","scheme":"http","url":"http://dkms-watcher.hus.nextgen.hiro-develop.nl/"}'
+  # AID (rare) this needs to be rotated to match. Use the in-cluster
+  # service URL so mesagkesto bypasses the ingress HTTP→HTTPS redirect
+  # (the pod has no Let's Encrypt chain, so a round-trip via the public
+  # hostname fails on 'unable to get local issuer certificate').
+  watcherOobi: '{"eid":"BF2t2NPc1bwptY1hYV0YCib1JjQ11k9jtuaZemecPF5b","scheme":"http","url":"http://ds-dkms-watcher:3235/"}'
   ingress:
     enabled: true
     className: nginx
