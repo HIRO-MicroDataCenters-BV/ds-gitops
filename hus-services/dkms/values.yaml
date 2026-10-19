@@ -61,6 +61,10 @@ mesagkesto:
   enabled: true
   seedSecretName: dkms-mesagkesto-seed
   publicUrl: "http://dkms-mesagkesto.hus.nextgen.hiro-develop.nl"
+  # Real watcher OOBI (eid = watcher's AID). Captured from the hus
+  # watcher at first boot — if the watcher is ever re-seeded with a new
+  # AID (rare) this needs to be rotated to match.
+  watcherOobi: '{"eid":"BF2t2NPc1bwptY1hYV0YCib1JjQ11k9jtuaZemecPF5b","scheme":"http","url":"http://dkms-watcher.hus.nextgen.hiro-develop.nl/"}'
   ingress:
     enabled: true
     className: nginx
