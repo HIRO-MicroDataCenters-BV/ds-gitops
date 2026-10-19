@@ -50,14 +50,17 @@ watcher:
   persistence:
     enabled: true
     size: 1Gi
+  # Watcher ingress is DISABLED here because the chart derives the Ingress
+  # host from watcher.publicUrl by stripping the scheme — and our in-cluster
+  # URL ds-dkms-watcher:3235 produces an invalid host (contains a port) that
+  # Kubernetes rejects, failing the whole DKMS Helm render (ErrApplied on
+  # the Fleet bundle).
+  # Nothing outside the cluster needs to reach the watcher — mesagkesto and
+  # ds-login resolve it via the in-cluster Service name. Re-enable only
+  # after the chart separates publicUrl (OOBI content) from ingress.host
+  # (routing) — tracked for a ds-dkms chart fix.
   ingress:
-    enabled: true
-    className: nginx
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    tls:
-      enabled: true
-      secretName: dkms-watcher-tls
+    enabled: false
   nodeSelector:
     role: hus
 
