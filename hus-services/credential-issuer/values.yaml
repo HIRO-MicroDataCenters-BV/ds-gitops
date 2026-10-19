@@ -63,10 +63,9 @@ env:
 # consume. Mutations require issuer:write, admin requires issuer:admin.
 auth:
   enabled: true
-  # ds-login's Service is "ds-login-ds-login" because the Helm release
-  # name and chart name are both "ds-login" (release-chart doubling).
-  # Not "ds-login" — that doesn't resolve.
-  jwksUrl: http://ds-login-ds-login:8080/.well-known/jwks.json
+  # Clean Service name after ds-login chart 0.1.4 fixed the release-name
+  # doubling in its fullname helper.
+  jwksUrl: http://ds-login:8080/.well-known/jwks.json
   policyEngineUrl: http://ds-policy-engine:8000
 
 nodeSelector:
