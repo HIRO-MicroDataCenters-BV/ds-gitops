@@ -63,7 +63,10 @@ env:
 # consume. Mutations require issuer:write, admin requires issuer:admin.
 auth:
   enabled: true
-  jwksUrl: http://ds-login:8080/.well-known/jwks.json
+  # ds-login's Service is "ds-login-ds-login" because the Helm release
+  # name and chart name are both "ds-login" (release-chart doubling).
+  # Not "ds-login" — that doesn't resolve.
+  jwksUrl: http://ds-login-ds-login:8080/.well-known/jwks.json
   policyEngineUrl: http://ds-policy-engine:8000
 
 nodeSelector:
