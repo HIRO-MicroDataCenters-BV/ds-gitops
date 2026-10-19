@@ -3,8 +3,13 @@
 # ds-login's AcdcVerifier reads under the open-federation model.
 
 image:
-  tag: "develop"
-  pullPolicy: Always
+  # Pinned to a specific SHA-stamped tag published by ds-credential-issuer
+  # CI (format: <appVersion>-dev.<run>.<branch>.<short-sha>). Matches how
+  # every other ds-* service pins its image and lets us use IfNotPresent,
+  # so pod restarts hit the local containerd cache instead of ghcr's
+  # anonymous token endpoint (which rate-limits the cluster egress IP).
+  tag: "0.1.0-dev.15.develop.d4eddde6"
+  pullPolicy: IfNotPresent
 
 # Per-service ingress alongside the gateway route. Easier to hit directly
 # during initial testing; gateway route (/credential-issuer/*) remains for
