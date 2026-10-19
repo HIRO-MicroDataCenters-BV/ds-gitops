@@ -1,9 +1,9 @@
 defaultNamespace: hus
-dependsOn:
-  # Needs DKMS up — ds-login resolves issuer KELs from the OOBIs embedded
-  # in each incoming IPEX grant, and in the dev-fallback path (challenge
-  # liveness probe) it pings this site's keriox watcher.
-  - name: nextgen-gitops-hus-services-dkms
+# No dependsOn on DKMS — if DKMS is broken, we want ds-login to install
+# and crashloop with a visible error (OOBI resolve / watcher ping) rather
+# than silently never deploy. The service tolerates a transient DKMS
+# outage via its own retry loop; Kubernetes readiness probes handle the
+# cold-start race once DKMS comes up.
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-login
   chart: ds-login
