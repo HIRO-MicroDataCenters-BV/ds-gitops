@@ -4,7 +4,11 @@
 # other ds-* service via ds-auth.
 
 image:
-  tag: "0.1.3"
+  # ghcr.io/hiro-microdatacenters-bv/ds-login only publishes 'develop'
+  # and 'main' tags today — no versioned 0.1.x images. Pin to develop
+  # for now; move to 'main' (or an explicit SHA) once we start cutting
+  # ds-login release tags.
+  tag: "develop"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
