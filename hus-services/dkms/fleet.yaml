@@ -3,6 +3,6 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-dkms
   chart: ds-dkms
   releaseName: ds-dkms
-  version: 0.1.1
+  version: 0.1.3
   valuesFiles:
     - values.yaml
