@@ -10,10 +10,17 @@
 
 baseDomain: hus.nextgen.hiro-develop.nl
 
+# keriox 0.17.13 rejects `https` in the three `public_url` fields with
+# "Unsupported scheme https" — it only accepts http (TLS is terminated at
+# ingress). Override the chart's default `https://` pattern here. These
+# URLs are what gets embedded in the OOBIs the witness/watcher advertise;
+# consumers reach them via the ingress and the TLS layer stops at
+# nginx — the keriox pod itself speaks plain HTTP.
 witness:
   enabled: true
   replicaCount: 1
   seedSecretName: dkms-witness-seeds
+  publicUrlPattern: "http://dkms-witness-{idx}.hus.nextgen.hiro-develop.nl"
   persistence:
     enabled: true
     storageClass: ""
@@ -32,6 +39,7 @@ witness:
 watcher:
   enabled: true
   seedSecretName: dkms-watcher-seed
+  publicUrl: "http://dkms-watcher.hus.nextgen.hiro-develop.nl"
   # Replaced after first boot: once the witness's AID is known the
   # operator records its OOBI here so the watcher subscribes on restart.
   initialOobis: []
@@ -52,6 +60,7 @@ watcher:
 mesagkesto:
   enabled: true
   seedSecretName: dkms-mesagkesto-seed
+  publicUrl: "http://dkms-mesagkesto.hus.nextgen.hiro-develop.nl"
   ingress:
     enabled: true
     className: nginx
