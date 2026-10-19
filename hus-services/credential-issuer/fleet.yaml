@@ -1,8 +1,9 @@
 defaultNamespace: hus
-dependsOn:
-  # Needs DKMS up (witness + watcher + mesagkesto) before the issuer
-  # can anchor its own inception event and resolve subject AIDs.
-  - name: nextgen-gitops-hus-services-dkms
+# No dependsOn on DKMS — if DKMS is broken, we want ds-credential-issuer
+# to install and crashloop with a visible error (habery mint / watcher
+# resolve) rather than silently never deploy. The service tolerates a
+# transient DKMS outage via its own retry loop; Kubernetes readiness
+# probes handle the cold-start race once DKMS comes up.
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-credential-issuer
   chart: ds-credential-issuer
