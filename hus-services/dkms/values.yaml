@@ -39,7 +39,11 @@ witness:
 watcher:
   enabled: true
   seedSecretName: dkms-watcher-seed
-  publicUrl: "http://dkms-watcher.hus.nextgen.hiro-develop.nl"
+  # In-cluster URL so mesagkesto's /register call (which the watcher
+  # advertises in its own OOBI reply) stays inside the cluster and
+  # doesn't bounce through the nginx HTTP→HTTPS redirect, where the
+  # pod has no LE chain and TLS fails.
+  publicUrl: "http://ds-dkms-watcher:3235"
   # Replaced after first boot: once the witness's AID is known the
   # operator records its OOBI here so the watcher subscribes on restart.
   initialOobis: []
