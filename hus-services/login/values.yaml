@@ -4,11 +4,12 @@
 # other ds-* service via ds-auth.
 
 image:
-  # ghcr.io/hiro-microdatacenters-bv/ds-login only publishes 'develop'
-  # and 'main' tags today — no versioned 0.1.x images. Pin to develop
-  # for now; move to 'main' (or an explicit SHA) once we start cutting
-  # ds-login release tags.
-  tag: "develop"
+  # Pinned to the versioned SHA tag ds-login CI now publishes alongside
+  # 'develop' and 'main' (format: <appVersion>-dev.<run>.<branch>.<short-sha>).
+  # Matches the pattern used by every other ds-* service; combined with
+  # pullPolicy: IfNotPresent this means pod restarts hit the local
+  # containerd cache instead of ghcr's anonymous token endpoint.
+  tag: "0.1.0-dev.47.main.e8680af9"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
