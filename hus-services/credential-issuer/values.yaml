@@ -8,7 +8,7 @@ image:
   # every other ds-* service pins its image and lets us use IfNotPresent,
   # so pod restarts hit the local containerd cache instead of ghcr's
   # anonymous token endpoint (which rate-limits the cluster egress IP).
-  tag: "0.1.0-dev.21.develop.fb19fa17"
+  tag: "0.1.0-dev.30.develop.cdf8d567"
   pullPolicy: IfNotPresent
 
 # Per-service ingress alongside the gateway route. Easier to hit directly
@@ -36,12 +36,26 @@ issuer:
   # these match ds-dkms chart Service names in the hus namespace.
   witnessUrls:
     - http://ds-dkms-witness:3232
-  # OOBI the verifier (ds-login) uses to resolve this issuer's KEL — the
-  # externally-reachable witness URL + the witness AID (added after first
-  # boot). The {idx} path is per-pod; witness 1 is pod 0 in the chart.
-  witnessOobis:
-    # TODO: replace <witness-AID> after first boot of ds-dkms-witness-0
-    - https://dkms-witness-1.hus.nextgen.hiro-develop.nl/oobi/<witness-AID>
+
+  # AIDs of those witnesses (positionally matched to witnessUrls).
+  # KERIpy's makeHab(wits=...) wants AIDs, not URLs — without this the
+  # issuer is minted self-sovereign (wits=[]) and no witness ever stores
+  # its KEL, so verifiers cannot resolve the issuer's OOBI.
+  witnessAids:
+    - BJq7UABlttINuWJh1Xl2lkqZG4NTdUdqnbFJDa6ZyxCC   # hus witness AID
+
+  # Externally-reachable base URL(s) per witness. The chart composes the
+  # ISSUER's own OOBI as "{base}/oobi/{issuerAid}" at grant time, so
+  # verifiers outside the cluster can resolve the issuer's live KEL.
+  # Leave empty to fall back to witnessUrls (in-cluster-only resolution,
+  # fine for intra-site verifiers).
+  witnessOobiBases:
+    - https://dkms-witness-1.hus.nextgen.hiro-develop.nl
+
+  # DEPRECATED. Explicit pre-computed OOBIs — only use when the OOBI
+  # endpoint shape differs from the default keriox /oobi/<AID> pattern.
+  witnessOobis: []
+
   mesagkestoUrl: http://ds-dkms-mesagkesto:8081
   inceptionThreshold: 1
 
