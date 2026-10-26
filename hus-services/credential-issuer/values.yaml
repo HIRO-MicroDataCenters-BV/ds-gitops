@@ -8,7 +8,7 @@ image:
   # every other ds-* service pins its image and lets us use IfNotPresent,
   # so pod restarts hit the local containerd cache instead of ghcr's
   # anonymous token endpoint (which rate-limits the cluster egress IP).
-  tag: "0.1.0-dev.30.develop.cdf8d567"
+  tag: "0.1.0-dev.32.develop.bdc314f5"
   pullPolicy: IfNotPresent
 
 # Per-service ingress alongside the gateway route. Easier to hit directly
@@ -26,38 +26,36 @@ ingress:
     secretName: ds-credential-issuer-tls-secret
 
 issuer:
-  # Habitat alias — becomes the KERIpy habery name on first boot.
+  # Alias dkms-bin stores the issuer identifier under.
   name: hus-issuer
 
-  # Where KERIpy stores the LMDB keystore. The PVC below mounts here.
-  haberyPath: /var/lib/ds-credential-issuer/keystore
+  # Chart 0.2.0 facade: dkms-bin takes care of inception, witness
+  # receipting, watcher subscription and OOBI publication on first boot.
+  # See ADR 0002 (ds-login/docs/adr/0002-dkms-bin-facade.md) for the
+  # rationale.
+  dkmsWitnessUrl: http://ds-dkms-witness:3232
+  dkmsWatcherUrl: http://ds-dkms-watcher:3235
+  dkmsWitnessThreshold: 1
+  dkmsHome: /var/lib/ds-credential-issuer/dkms
 
-  # Point the issuer at HUS's own DKMS stack. In-cluster Service DNS —
-  # these match ds-dkms chart Service names in the hus namespace.
-  witnessUrls:
-    - http://ds-dkms-witness:3232
-
-  # AIDs of those witnesses (positionally matched to witnessUrls).
-  # KERIpy's makeHab(wits=...) wants AIDs, not URLs — without this the
-  # issuer is minted self-sovereign (wits=[]) and no witness ever stores
-  # its KEL, so verifiers cannot resolve the issuer's OOBI.
-  witnessAids:
-    - BJq7UABlttINuWJh1Xl2lkqZG4NTdUdqnbFJDa6ZyxCC   # hus witness AID
-
-  # Externally-reachable base URL(s) per witness. The chart composes the
-  # ISSUER's own OOBI as "{base}/oobi/{issuerAid}" at grant time, so
-  # verifiers outside the cluster can resolve the issuer's live KEL.
-  # Leave empty to fall back to witnessUrls (in-cluster-only resolution,
-  # fine for intra-site verifiers).
-  witnessOobiBases:
-    - https://dkms-witness-1.hus.nextgen.hiro-develop.nl
-
-  # DEPRECATED. Explicit pre-computed OOBIs — only use when the OOBI
-  # endpoint shape differs from the default keriox /oobi/<AID> pattern.
-  witnessOobis: []
+  # OCA bundle SAID required by `dkms data issue -b <...>`. Empty for
+  # now until the consortium picks a shared schema registry; the smoke
+  # test uses a dummy credential schema.
+  # TODO: set this to a published OCA bundle SAID once the registry
+  # story settles. See ADR 0002 "What's blocking end-to-end".
+  defaultOcaBundleSaid: ""
 
   mesagkestoUrl: http://ds-dkms-mesagkesto:8081
   inceptionThreshold: 1
+
+  # ─── Legacy KERIpy fields (unused in the facade path) ───────────
+  # Kept so a rollback to chart 0.1.5 still renders without surprise.
+  # Delete after chart 0.2.0 has baked in production.
+  haberyPath: /var/lib/ds-credential-issuer/keystore
+  witnessUrls: []
+  witnessAids: []
+  witnessOobiBases: []
+  witnessOobis: []
 
 persistence:
   enabled: true
