@@ -20,7 +20,7 @@ witness:
   enabled: true
   replicaCount: 1
   seedSecretName: dkms-witness-seeds
-  publicUrlPattern: "http://dkms-witness-{idx}.hus.nextgen.hiro-develop.nl"
+  publicUrlPattern: "http://ds-dkms-witness-{idx}:3232"
   persistence:
     enabled: true
     storageClass: ""
