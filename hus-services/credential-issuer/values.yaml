@@ -43,7 +43,7 @@ issuer:
   # test uses a dummy credential schema.
   # TODO: set this to a published OCA bundle SAID once the registry
   # story settles. See ADR 0002 "What's blocking end-to-end".
-  defaultOcaBundleSaid: ""
+  defaultOcaBundleSaid: "EA3UqX0yElhvuw-6fcAgr7gX58IOT8lK5VOqysjdR9hR"
 
   mesagkestoUrl: http://ds-dkms-mesagkesto:8081
   inceptionThreshold: 1
