@@ -8,6 +8,6 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-credential-issuer
   chart: ds-credential-issuer
   releaseName: ds-credential-issuer
-  version: 0.1.4
+  version: 0.1.5
   valuesFiles:
     - values.yaml
