@@ -8,7 +8,7 @@ image:
   # every other ds-* service pins its image and lets us use IfNotPresent,
   # so pod restarts hit the local containerd cache instead of ghcr's
   # anonymous token endpoint (which rate-limits the cluster egress IP).
-  tag: "0.1.0-dev.32.develop.bdc314f5"
+  tag: "0.1.0-dev.40.develop.57bd9a0a"
   pullPolicy: IfNotPresent
 
 # Per-service ingress alongside the gateway route. Easier to hit directly
