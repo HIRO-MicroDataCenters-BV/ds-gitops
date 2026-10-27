@@ -1,6 +1,6 @@
 ingress:
   host: nextgen.hiro-develop.nl
-    
+
 migrate:
   enabled: false
 
@@ -8,3 +8,12 @@ nodeSelector:
   role: hus
 
 namespace: hus
+
+# Gates every non-public catalog path on a valid ds-login JWT. The
+# middleware checks required permissions against ds-policy-engine (see
+# app/rest_api/auth_config.py: PERMISSION_MAP). Without this, GET
+# /catalog/filters/ and friends return 200 to unauthenticated callers.
+auth:
+  enabled: true
+  jwksUrl: "http://ds-login:8080/.well-known/jwks.json"
+  policyEngineUrl: "http://ds-policy-engine:8000"
