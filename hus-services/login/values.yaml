@@ -9,7 +9,7 @@ image:
   # Matches the pattern used by every other ds-* service; combined with
   # pullPolicy: IfNotPresent this means pod restarts hit the local
   # containerd cache instead of ghcr's anonymous token endpoint.
-  tag: "0.1.0-dev.88.develop.e8cc5a96"
+  tag: "0.1.0-dev.93.develop.3b3810b7"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
