@@ -13,8 +13,8 @@ This repo is public: seeds never go into it in plaintext.
 scripts/seal-dkms-seeds.sh hus
         │  generates 3 seeds with `dkms key seed`
         ▼
-Secret hus/dkms-seeds, key values.yaml:      ◄── sealed: hus-services/dkms-seeds/sealed-dkms-seeds.yaml
-  witness:    { seed: "A…" }                      or created directly (--apply) by an admin
+Secret hus/dkms-seeds, key values.yaml:      ◄── created directly (--apply) by a cluster admin
+  witness:    { seed: "A…" }                      (HUS, 28 Oct 2026), or later a SealedSecret
   watcher:    { seed: "A…" }
   mesagkesto: { seed: "A…" }
         │  Fleet helm.valuesFrom (hus-services/dkms/fleet.yaml)
@@ -34,11 +34,14 @@ for the sealed variant — `kubeseal` plus the SealedSecrets controller on the
 cluster.
 
 ```bash
-# Sealed file, committed to git (needs the SealedSecrets controller)
-./scripts/seal-dkms-seeds.sh hus
-
-# Or: create the Secret directly (admin bootstrap; nothing in git)
+# Create the Secret directly (cluster admin; nothing in git) — used for HUS
 ./scripts/seal-dkms-seeds.sh hus --apply
+
+# Or: a sealed file to commit (needs kubeseal + the SealedSecrets controller,
+# which HUS does not have yet). It is written to <site>-services/dkms-seeds/;
+# that folder then needs its own fleet.yaml, and dkms/fleet.yaml a dependsOn
+# on it, so the Secret exists before ds-dkms renders.
+./scripts/seal-dkms-seeds.sh hus
 ```
 
 The script refuses to run if `dkms-seeds` already exists. It writes the
@@ -60,9 +63,19 @@ New seeds mean new AIDs. Everything tied to the old ones must be redone:
    ```
 3. Put the new watcher AID into `mesagkesto.watcherOobi` in `values.yaml`.
 4. Re-create the credential issuer's identity on the new witness (its dkms
-   alias lives on the issuer PVC), then update the trusted-issuer list in
-   ds-login.
-5. Re-create any test identities.
+   alias lives on the issuer PVC):
+   ```bash
+   kubectl -n hus exec deploy/ds-credential-issuer -- sh -c \
+     'mv /var/lib/ds-credential-issuer/dkms/.dkms-dev-cli/hus-issuer /var/lib/ds-credential-issuer/hus-issuer.old'
+   kubectl -n hus rollout restart deploy/ds-credential-issuer
+   kubectl -n hus logs deploy/ds-credential-issuer | grep "issuer ready"
+   ```
+5. Put the new issuer AID into `trustedIssuerAids` in
+   `hus-services/login/values.yaml`. Until it is deployed, every login is
+   rejected ("not on this verifier's trusted-issuer allowlist").
+6. Re-create identities anchored at the old witness: the operator
+   (`operator-dkms` PVC) and test holders (`e2e-holder-dkms`), then re-issue the
+   operator credential from the new issuer.
 
 ## Rotation
 

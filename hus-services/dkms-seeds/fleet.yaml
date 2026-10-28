@@ -1,9 +1,0 @@
-# DKMS seeds for HUS: the SealedSecret `dkms-seeds` (key `values.yaml`) that
-# hus-services/dkms reads through helm.valuesFrom. Kept in its own bundle so
-# the Secret exists before the ds-dkms release renders.
-#
-# sealed-dkms-seeds.yaml is produced ONCE by scripts/seal-dkms-seeds.sh hus.
-# Until the SealedSecrets controller is installed on the cluster, an admin
-# creates the Secret directly with `scripts/seal-dkms-seeds.sh hus --apply`
-# and this bundle stays empty. See hus-services/dkms/SEEDS.md.
-defaultNamespace: hus
