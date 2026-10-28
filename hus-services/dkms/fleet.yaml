@@ -1,4 +1,7 @@
 defaultNamespace: hus
+# Seeds come from the dkms-seeds bundle (see SEEDS.md); wait for it.
+dependsOn:
+  - name: nextgen-gitops-hus-services-dkms-seeds
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-dkms
   chart: ds-dkms
@@ -6,3 +9,10 @@ helm:
   version: 0.1.3
   valuesFiles:
     - values.yaml
+  # Per-site KERI seeds for witness, watcher and mesagkesto. The Secret holds a
+  # Helm values file; it never appears in this public repo in plaintext.
+  valuesFrom:
+    - secretKeyRef:
+        name: dkms-seeds
+        namespace: hus
+        key: values.yaml

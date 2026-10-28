@@ -4,9 +4,9 @@
 # the hus namespace at *.hus.nextgen.hiro-develop.nl. Scale witnesses up
 # (and rotate every AID) when we federate beyond HUS.
 #
-# Seeds (dkms-witness-seeds / dkms-watcher-seed / dkms-mesagkesto-seed)
-# are provisioned out-of-band in the hus namespace as SealedSecret
-# manifests — see dkms/SEEDS.md.
+# Seeds: NOT in this file (this repo is public). witness.seed, watcher.seed
+# and mesagkesto.seed come from the Secret hus/dkms-seeds through
+# helm.valuesFrom in fleet.yaml — see SEEDS.md.
 
 baseDomain: hus.nextgen.hiro-develop.nl
 
@@ -19,7 +19,6 @@ baseDomain: hus.nextgen.hiro-develop.nl
 witness:
   enabled: true
   replicaCount: 1
-  seedSecretName: dkms-witness-seeds
   publicUrlPattern: "http://ds-dkms-witness-{idx}:3232"
   persistence:
     enabled: true
@@ -38,7 +37,6 @@ witness:
 
 watcher:
   enabled: true
-  seedSecretName: dkms-watcher-seed
   # In-cluster URL so mesagkesto's /register call (which the watcher
   # advertises in its own OOBI reply) stays inside the cluster and
   # doesn't bounce through the nginx HTTP→HTTPS redirect, where the
@@ -66,11 +64,12 @@ watcher:
 
 mesagkesto:
   enabled: true
-  seedSecretName: dkms-mesagkesto-seed
   publicUrl: "http://dkms-mesagkesto.hus.nextgen.hiro-develop.nl"
   # Real watcher OOBI (eid = watcher's AID). Captured from the hus
   # watcher at first boot — if the watcher is ever re-seeded with a new
-  # AID (rare) this needs to be rotated to match. Use the in-cluster
+  # AID (rare) this needs to be rotated to match.
+  # TODO(re-key): this eid is the HCF demo watcher's AID (public seed).
+  # Replace it with the new watcher AID after dkms-seeds is created. Use the in-cluster
   # service URL so mesagkesto bypasses the ingress HTTP→HTTPS redirect
   # (the pod has no Let's Encrypt chain, so a round-trip via the public
   # hostname fails on 'unable to get local issuer certificate').
