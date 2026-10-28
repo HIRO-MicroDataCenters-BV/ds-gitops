@@ -8,7 +8,7 @@ image:
   # every other ds-* service pins its image and lets us use IfNotPresent,
   # so pod restarts hit the local containerd cache instead of ghcr's
   # anonymous token endpoint (which rate-limits the cluster egress IP).
-  tag: "0.1.0-dev.56.develop.c009c394"
+  tag: "0.1.0-dev.63.main.7a9799cd"
   pullPolicy: IfNotPresent
 
 # Per-service ingress alongside the gateway route. Easier to hit directly
@@ -46,6 +46,10 @@ issuer:
   defaultOcaBundleSaid: "EA3UqX0yElhvuw-6fcAgr7gX58IOT8lK5VOqysjdR9hR"
 
   mesagkestoUrl: http://ds-dkms-mesagkesto:8081
+  # TEMPORARY (2026-10-28): one-time operator bootstrap, POST /bootstrap/operator.
+  # Token in Secret hus/issuer-bootstrap (key `token`), created by hand, never in
+  # git. Remove this line and delete the Secret right after the bootstrap.
+  bootstrapTokenSecret: issuer-bootstrap
   inceptionThreshold: 1
 
   # ─── Legacy KERIpy fields (unused in the facade path) ───────────
