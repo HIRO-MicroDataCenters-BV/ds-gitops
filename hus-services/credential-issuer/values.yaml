@@ -46,10 +46,6 @@ issuer:
   defaultOcaBundleSaid: "EA3UqX0yElhvuw-6fcAgr7gX58IOT8lK5VOqysjdR9hR"
 
   mesagkestoUrl: http://ds-dkms-mesagkesto:8081
-  # TEMPORARY (2026-10-28): one-time operator bootstrap, POST /bootstrap/operator.
-  # Token in Secret hus/issuer-bootstrap (key `token`), created by hand, never in
-  # git. Remove this line and delete the Secret right after the bootstrap.
-  bootstrapTokenSecret: issuer-bootstrap
   inceptionThreshold: 1
 
   # ─── Legacy KERIpy fields (unused in the facade path) ───────────
