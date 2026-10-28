@@ -9,7 +9,7 @@ image:
   # Matches the pattern used by every other ds-* service; combined with
   # pullPolicy: IfNotPresent this means pod restarts hit the local
   # containerd cache instead of ghcr's anonymous token endpoint.
-  tag: "0.1.0-dev.132.main.9422e6e1"
+  tag: "0.1.0-dev.135.main.b4d36ea4"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
@@ -77,6 +77,13 @@ logLevel: INFO
 # the old AID EJ5Wvuqw… was anchored at the HCF demo witness.
 trustedIssuerAids:
   - EAjRk4pg98-KSwb9_NjBepdIL4Xx3bznhmQDBGCRLU4G
+
+# Revocation status per trusted issuer (chart 0.1.6+). ds-login asks
+# GET <url>/credential-status?said=… on every credential login and fails
+# closed: revoked or unreachable → login refused. Every trusted issuer needs
+# an entry, or ds-login refuses to start in production.
+issuerStatusUrls:
+  EAjRk4pg98-KSwb9_NjBepdIL4Xx3bznhmQDBGCRLU4G: http://ds-credential-issuer:8080
 
 nodeSelector:
   role: hus
