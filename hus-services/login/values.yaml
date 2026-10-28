@@ -73,8 +73,10 @@ logLevel: INFO
 # fresh init, keystore wipe). A missing entry → every grant minted
 # by that issuer rejected at verify time with 'issuer not on trusted
 # allowlist'.
+# Re-keyed 2026-10-28: issuer re-created on the per-site witness (BE8qbs7O…);
+# the old AID EJ5Wvuqw… was anchored at the HCF demo witness.
 trustedIssuerAids:
-  - EJ5WvuqwnfTfSZ-bx26NTEgslUp5Bnw2Fbja_P5I8_O1
+  - EAjRk4pg98-KSwb9_NjBepdIL4Xx3bznhmQDBGCRLU4G
 
 nodeSelector:
   role: hus

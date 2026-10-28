@@ -24,14 +24,13 @@ witness:
     enabled: true
     storageClass: ""
     size: 1Gi
+  # Ingress OFF: the chart builds the Ingress host from publicUrlPattern,
+  # giving "ds-dkms-witness-1:3232" (port in host), which Kubernetes rejects,
+  # so every ds-dkms upgrade failed (Helm release "failed"). Same workaround as
+  # the watcher. Nothing uses the public witness URL today (OOBIs advertise the
+  # in-cluster URL). Re-enable once the chart takes a separate ingress host.
   ingress:
-    enabled: true
-    className: nginx
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-    tls:
-      enabled: true
-      secretNamePattern: "dkms-witness-{idx}-tls"
+    enabled: false
   nodeSelector:
     role: hus
 
@@ -68,12 +67,12 @@ mesagkesto:
   # Real watcher OOBI (eid = watcher's AID). Captured from the hus
   # watcher at first boot — if the watcher is ever re-seeded with a new
   # AID (rare) this needs to be rotated to match.
-  # TODO(re-key): this eid is the HCF demo watcher's AID (public seed).
-  # Replace it with the new watcher AID after dkms-seeds is created. Use the in-cluster
+  # Re-keyed 2026-10-28: watcher AID from the per-site seeds (dkms-seeds).
+  # Use the in-cluster
   # service URL so mesagkesto bypasses the ingress HTTP→HTTPS redirect
   # (the pod has no Let's Encrypt chain, so a round-trip via the public
   # hostname fails on 'unable to get local issuer certificate').
-  watcherOobi: '{"eid":"BF2t2NPc1bwptY1hYV0YCib1JjQ11k9jtuaZemecPF5b","scheme":"http","url":"http://ds-dkms-watcher:3235/"}'
+  watcherOobi: '{"eid":"BKv5EaiXBWHdjR1vJutuLbBixtLxpdWD3SD5GjlL3mpX","scheme":"http","url":"http://ds-dkms-watcher:3235/"}'
   ingress:
     enabled: true
     className: nginx
