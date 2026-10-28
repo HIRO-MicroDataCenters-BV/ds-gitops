@@ -9,7 +9,7 @@ image:
   # Matches the pattern used by every other ds-* service; combined with
   # pullPolicy: IfNotPresent this means pod restarts hit the local
   # containerd cache instead of ghcr's anonymous token endpoint.
-  tag: "0.1.0-dev.98.develop.0340e922"
+  tag: "0.1.0-dev.115.develop.aed78d21"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
@@ -62,6 +62,19 @@ jwt:
 
 environment: production
 logLevel: INFO
+
+# Rahul audit #1 — trusted-issuer allowlist. Without this entry
+# ds-login refuses to start in production (fail-safe default). The
+# listed AID is the HUS ds-credential-issuer's bootstrap AID,
+# visible at startup via:
+#   kubectl -n hus exec deploy/ds-credential-issuer \
+#     -- dkms identifier info hus-issuer
+# Rotate this list whenever the issuer identity rotates (new PVC,
+# fresh init, keystore wipe). A missing entry → every grant minted
+# by that issuer rejected at verify time with 'issuer not on trusted
+# allowlist'.
+trustedIssuerAids:
+  - EJ5WvuqwnfTfSZ-bx26NTEgslUp5Bnw2Fbja_P5I8_O1
 
 nodeSelector:
   role: hus
