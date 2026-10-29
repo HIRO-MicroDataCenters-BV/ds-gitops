@@ -35,6 +35,10 @@ issuer:
   institute: hus
   # Role of the one-time bootstrap credential (POST /bootstrap/operator).
   bootstrapRole: site_admin
+  # TEMPORARY (29 Oct 2026): re-armed once to issue the first site_admin@hus
+  # (Secret hus/issuer-bootstrap, key `token`). Remove this line and delete the
+  # Secret right after the bootstrap.
+  bootstrapTokenSecret: issuer-bootstrap
 
   # Chart 0.2.0 facade: dkms-bin takes care of inception, witness
   # receipting, watcher subscription and OOBI publication on first boot.
