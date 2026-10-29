@@ -14,7 +14,7 @@ replicaCount: 1
 image:
   repository: ghcr.io/hiro-microdatacenters-bv/ds-policy-engine
   # Chart's appVersion sets a sensible default; leave empty to let the chart pick.
-  tag: "0.1.0-dev.37.main.492e9d5b"
+  tag: "0.1.0-dev.39.main.1a7f1ec7"
   pullPolicy: IfNotPresent
 
 service:
@@ -88,3 +88,30 @@ extraEnv:
     # Self-reference: /api/v1/policies/evaluate is on PUBLIC_PATHS, so this
     # does not loop through auth.
     value: "http://localhost:8000"
+
+# role@site rules for HUS (institute = site name). A Job loads them after every
+# deploy and REPLACES all rules in the engine: rules added in the UI are lost
+# on the next deploy. Change rules here, not in the UI.
+# The loader calls the import API without a token, so it needs
+# DS__AUTH_ENABLED=false above; give it a token before turning auth on.
+rules:
+  - name: site-admin-hus
+    role: site_admin
+    institute: hus
+    description: Runs the site; may do everything
+    permissions: [issuer:write, issuer:read, rules:admin, catalog:read, catalog:write, decentralized-search:execute, federated-learning:execute]
+  - name: operator-hus
+    role: operator
+    institute: hus
+    description: Issues and revokes data_provider and researcher credentials
+    permissions: [issuer:write, issuer:read]
+  - name: data-provider-hus
+    role: data_provider
+    institute: hus
+    description: Publishes datasets in this site's catalog
+    permissions: [catalog:read, catalog:write]
+  - name: researcher-hus
+    role: researcher
+    institute: hus
+    description: Finds and uses data
+    permissions: [catalog:read, decentralized-search:execute, federated-learning:execute]
