@@ -9,7 +9,7 @@ image:
   # Matches the pattern used by every other ds-* service; combined with
   # pullPolicy: IfNotPresent this means pod restarts hit the local
   # containerd cache instead of ghcr's anonymous token endpoint.
-  tag: "0.1.0-dev.138.main.0560b7a5"
+  tag: "0.1.0-dev.141.main.d405a7ac"
   pullPolicy: IfNotPresent
 
 replicaCount: 1
@@ -84,6 +84,11 @@ trustedIssuerAids:
 # an entry, or ds-login refuses to start in production.
 issuerStatusUrls:
   EAjRk4pg98-KSwb9_NjBepdIL4Xx3bznhmQDBGCRLU4G: http://ds-credential-issuer:8080
+
+# CORS (chart 0.1.7+): the website signs the login nonce in the browser and
+# calls ds-login directly, like catalog and search. "*" = every website, as
+# those services allow; ds-login uses no cookies.
+corsAllowedOrigins: ["*"]
 
 nodeSelector:
   role: hus

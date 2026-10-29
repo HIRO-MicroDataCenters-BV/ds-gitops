@@ -8,7 +8,7 @@ image:
   # every other ds-* service pins its image and lets us use IfNotPresent,
   # so pod restarts hit the local containerd cache instead of ghcr's
   # anonymous token endpoint (which rate-limits the cluster egress IP).
-  tag: "0.1.0-dev.71.main.6e8913e8"
+  tag: "0.1.0-dev.73.main.c267cabb"
   pullPolicy: IfNotPresent
 
 # Per-service ingress alongside the gateway route. Easier to hit directly
@@ -76,6 +76,10 @@ env:
   DS__LOG_LEVEL: INFO
   # Database for the schema registry (local sqlite inside the PVC).
   DS__DATABASE_URL: "sqlite+aiosqlite:////var/lib/ds-credential-issuer/schemas.db"
+  # CORS: the website's Credentials page calls the issuer from the browser,
+  # like catalog and search. "*" = every website (image dev.73+ puts CORS in
+  # front of ds-auth, so preflights and 401/403 answers get CORS headers).
+  DS__CORS_ALLOWED_ORIGINS: "*"
 
 # ds-auth middleware — gated by DS__AUTH__ENABLED. Enable once ds-login
 # is deployed and issuing JWTs that this service's permission checks can
