@@ -8,7 +8,7 @@ image:
   # every other ds-* service pins its image and lets us use IfNotPresent,
   # so pod restarts hit the local containerd cache instead of ghcr's
   # anonymous token endpoint (which rate-limits the cluster egress IP).
-  tag: "0.1.0-dev.69.main.b917b111"
+  tag: "0.1.0-dev.71.main.6e8913e8"
   pullPolicy: IfNotPresent
 
 # Per-service ingress alongside the gateway route. Easier to hit directly
@@ -28,6 +28,13 @@ ingress:
 issuer:
   # Alias dkms-bin stores the issuer identifier under.
   name: hus-issuer
+
+  # role@site (chart 0.2.3): every credential's institute is this site, and
+  # the issuer refuses any other. Roles and who may issue them:
+  # site_admin → every role; operator → data_provider, researcher.
+  institute: hus
+  # Role of the one-time bootstrap credential (POST /bootstrap/operator).
+  bootstrapRole: site_admin
 
   # Chart 0.2.0 facade: dkms-bin takes care of inception, witness
   # receipting, watcher subscription and OOBI publication on first boot.
