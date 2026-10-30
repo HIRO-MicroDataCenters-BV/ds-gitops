@@ -14,3 +14,8 @@ backend:
   trainingBuilderServiceURL: https://dashboard.cog.hiro-develop.nl/apidev
   cogURL: https://dashboard.cog.hiro-develop.nl/uidev/
   apiCogURL: https://dashboard.cog.hiro-develop.nl/apidev
+  # DKMS key-file sign-in and the Credentials page. The browser calls both
+  # directly (they allow every website: CORS "*"). The HUS witness is not
+  # public, so there is no dkmsWitnessURL.
+  dsLoginURL: https://ds-login.hus.nextgen.hiro-develop.nl
+  credentialIssuerURL: https://ds-credential-issuer.hus.nextgen.hiro-develop.nl
