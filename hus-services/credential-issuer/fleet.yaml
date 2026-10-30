@@ -1,13 +1,13 @@
 defaultNamespace: hus
 # No dependsOn on DKMS — if DKMS is broken, we want ds-credential-issuer
-# to install and crashloop with a visible error (habery mint / watcher
-# resolve) rather than silently never deploy. The service tolerates a
+# to install and crashloop with a visible error (issuer AID enrolment /
+# watcher resolve) rather than silently never deploy. The service tolerates a
 # transient DKMS outage via its own retry loop; Kubernetes readiness
 # probes handle the cold-start race once DKMS comes up.
 helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-credential-issuer
   chart: ds-credential-issuer
   releaseName: ds-credential-issuer
-  version: 0.2.3
+  version: 0.2.4
   valuesFiles:
     - values.yaml

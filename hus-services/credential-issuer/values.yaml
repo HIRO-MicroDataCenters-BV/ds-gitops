@@ -8,7 +8,7 @@ image:
   # every other ds-* service pins its image and lets us use IfNotPresent,
   # so pod restarts hit the local containerd cache instead of ghcr's
   # anonymous token endpoint (which rate-limits the cluster egress IP).
-  tag: "0.1.0-dev.73.main.c267cabb"
+  tag: "0.1.0-dev.78.main.eea3ad0d"
   pullPolicy: IfNotPresent
 
 # Per-service ingress alongside the gateway route. Easier to hit directly
@@ -54,15 +54,6 @@ issuer:
 
   mesagkestoUrl: http://ds-dkms-mesagkesto:8081
   inceptionThreshold: 1
-
-  # ─── Legacy KERIpy fields (unused in the facade path) ───────────
-  # Kept so a rollback to chart 0.1.5 still renders without surprise.
-  # Delete after chart 0.2.0 has baked in production.
-  haberyPath: /var/lib/ds-credential-issuer/keystore
-  witnessUrls: []
-  witnessAids: []
-  witnessOobiBases: []
-  witnessOobis: []
 
 persistence:
   enabled: true
