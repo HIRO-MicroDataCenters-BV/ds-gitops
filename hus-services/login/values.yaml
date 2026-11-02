@@ -50,13 +50,15 @@ dkms:
 jwt:
   issuer: ds-login
   audience: hiro-services
-  ttlSeconds: 900
+  # 24 hours (Rahul, 2 Nov 2026). A token stays valid until it expires even if
+  # the credential is revoked in the meantime: revocation is checked at login.
+  ttlSeconds: 86400
   # Persistent RSA signing key. ds-login refuses to start with
   # environment=production unless this is set (or the inline-PEM env var).
   # Secret was generated out-of-band with openssl + kubectl create secret
   # (see ops/ds-login-signing-key.md for the one-shot command). Rotate by
   # recreating the Secret and restarting the pod — JWTs issued under the
-  # old key stay valid until TTL (900s).
+  # old key stay valid until TTL (86400s).
   signingKeySecretName: "ds-login-jwt-signing-key"
   signingKeySecretField: private.pem
 
