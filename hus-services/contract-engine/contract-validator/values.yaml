@@ -8,8 +8,8 @@ ingress:
 contractValidator:
   # MUST match the node's identity — rejects tokens whose aud != this.
   nodeId: "hus.nextgen.hiro-develop.nl"
-  # In-cluster URL of the stub Clearing House (same namespace).
-  clearingHouseUrl: "http://ds-clearing-house-stub:8084"
+  # In-cluster URL of the Clearing House (ds-clearing-house, same namespace).
+  clearingHouseUrl: "http://ds-clearing-house:8085"
   # In-cluster URL of the local Generator's JWKS endpoint.
   # Leave empty ("") in cross-node scenarios so it derives from iss instead.
   jwksBaseUrlTemplate: "http://ds-contract-generator:8082"

@@ -1,0 +1,32 @@
+nodeSelector:
+  role: hus
+
+# Internal only for now: the API has no authentication yet, so anyone who can
+# reach it could revoke a contract. The contract generator and validator call it
+# in-cluster at http://ds-clearing-house:8085.
+ingress:
+  enabled: false
+
+clearingHouse:
+  # Stamped on every ledger entry; same value as the contract generator's nodeId.
+  nodeId: "hus.nextgen.hiro-develop.nl"
+  environment: "production"
+  logLevel: INFO
+
+# SQLite on a ReadWriteOnce volume (cluster default storage class). The chart
+# runs one replica with strategy Recreate, as SQLite needs. Back this PVC up:
+# it holds every registered contract and its history.
+persistence:
+  enabled: true
+  size: 1Gi
+
+serviceMonitor:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
