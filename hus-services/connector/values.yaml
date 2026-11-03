@@ -17,7 +17,20 @@ env:
     value: "data/"
   - name: S3_ENDPOINT_URL
     value: "http://mlflow-minio.kubeflow.svc.cluster.local:9000"
-    
+
+# The chart default (limit 128Mi) gets the connector OOM-killed: opening "Add
+# New Item" in the portal lists the S3 data products (several parallel
+# /dataproducts/s3 calls) and the pod died with exit 137 twice on 3 Nov 2026
+# (09:19 and 09:25). It idles at ~84Mi. Same shape as clearing-house.
+# The HUS node's memory requests are at ~88%; this adds 64Mi to them.
+resources:
+  requests:
+    cpu: 250m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
 ingress:
   host: nextgen.hiro-develop.nl
   

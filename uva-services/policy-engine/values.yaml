@@ -1,13 +1,51 @@
+# UVA ds-policy-engine deploy (same shape as hus-services/policy-engine).
+# Evaluates per-request permission decisions. Every other ds-* service calls
+# POST /api/v1/policies/evaluate (public endpoint, no auth) to resolve what
+# the caller is allowed to do; the service's own admin surface (/rules etc.)
+# is gated by ds-auth when DS__AUTH_ENABLED=true.
+
 namespace: uva
 
 nodeSelector:
   role: uva
 
+replicaCount: 1
+
+image:
+  repository: ghcr.io/hiro-microdatacenters-bv/ds-policy-engine
+  # Chart's appVersion sets a sensible default; leave empty to let the chart pick.
+  tag: "0.1.0-dev.39.main.1a7f1ec7"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+# Per-service ingress alongside the gateway route. This chart already
+# supports annotations natively (no bump needed). Restores the pre-PR-#35
+# accessibility pattern the old 6-month-old deploy had.
 ingress:
-  # TEMP: enabled for now while there's no sensitive data and no shared
-  # gateway yet. Flip to false once ds-gateway fronts the service.
   enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   host: ds-policy-engine.uva.nextgen.hiro-develop.nl
+  path: /
+  pathType: Prefix
+  tls:
+    enabled: true
+    secretName: ds-policy-engine-tls-secret
+
+persistence:
+  enabled: true
+  accessModes: [ReadWriteOnce]
+  size: 1Gi
+  storageClass: ""
+  mountPath: /app/data
+
+env:
+  logLevel: INFO
+  # DS__NODE_NAME intentionally omitted — chart defaults it to the namespace.
 
 # With Option B the UI calls the backend same-origin through its nginx proxy,
 # so no browser ever hits this backend directly and CORS is not needed.
@@ -15,21 +53,84 @@ cors:
   allowedOrigins: ""
 
 # Swagger UI is on by default — /docs, /redoc, /openapi.json are reachable.
-# Will be flipped off explicitly later (e.g. once ds-gateway fronts the service
-# or the API surface goes sensitive). Until then, leave on.
+# Will be flipped off explicitly later (e.g. once ds-gateway fronts the
+# service or the API surface goes sensitive). Until then, leave on.
 docs:
   enabled: true
+
+dbQuery:
+  # /api/v1/db/query is a data-exfiltration surface. Keep OFF in prod.
+  enabled: false
 
 # OPA (Open Policy Agent) runs as a sidecar inside the policy-engine pod
 # and evaluates the compiled Rego rules at request time. Keep on — the
 # backend depends on it.
 opa:
   enabled: true
+  image:
+    repository: openpolicyagent/opa
+    tag: "1.2.0"
 
-persistence:
-  enabled: true
-  size: 1Gi
+# ds-auth wiring injected as extra env — the chart doesn't template these
+# directly (yet), so we use the extraEnv escape hatch. Default DISABLED
+# here: flip to "true" after ds-login is confirmed running + JWKs reachable
+# from this namespace. One-line change.
+extraEnv:
+  - name: DS__AUTH_ENABLED
+    value: "false"
+  - name: DS__AUTH_JWKS_URL
+    value: "http://ds-login:8080/.well-known/jwks.json"
+  - name: DS__AUTH_JWT_ISSUER
+    value: "ds-login"
+  - name: DS__AUTH_JWT_AUDIENCE
+    value: "hiro-services"
+  - name: DS__AUTH_POLICY_ENGINE_URL
+    # Self-reference: /api/v1/policies/evaluate is on PUBLIC_PATHS, so this
+    # does not loop through auth.
+    value: "http://localhost:8000"
 
-env:
-  logLevel: INFO
-  # DS__NODE_NAME intentionally omitted — chart defaults it to the namespace.
+# role@site rules for UVA (institute = site name). A Job loads them after every
+# deploy and REPLACES all rules in the engine: rules added in the UI are lost
+# on the next deploy. Change rules here, not in the UI. (Replaces the old
+# catalog_owner/creator/consumer rules, dropped on 29 Oct 2026.)
+# The loader calls the import API without a token, so it needs
+# DS__AUTH_ENABLED=false above; give it a token before turning auth on.
+rules:
+  - name: site-admin-uva
+    role: site_admin
+    institute: uva
+    description: Runs the site; may do everything
+    permissions: [issuer:write, issuer:read, rules:admin, catalog:read, catalog:write, decentralized-search:execute, federated-learning:execute]
+  - name: operator-uva
+    role: operator
+    institute: uva
+    description: Issues and revokes data_provider and researcher credentials
+    permissions: [issuer:write, issuer:read]
+  - name: data-provider-uva
+    role: data_provider
+    institute: uva
+    description: Publishes datasets in this site's catalog
+    permissions: [catalog:read, catalog:write]
+  - name: researcher-uva
+    role: researcher
+    institute: uva
+    description: Finds and uses data
+    permissions: [catalog:read, decentralized-search:execute, federated-learning:execute]
+  # Kept from the rules this engine held on 3 Nov 2026 (added in the UI, owner
+  # unknown; they look like COG API usage tiers). The loader would otherwise
+  # delete them.
+  - name: Admin Tier
+    role: admin_tier
+    institute: cogapi
+    description: "Platform operators — full platform access"
+    permissions: [model:read, model:create, model:upload, model:serve, model:fine-tune, dataset:read, dataset:create, pipeline:read, pipeline:create, pipeline:run]
+  - name: Enterprise Tier
+    role: enterprise_tier
+    institute: cogapi
+    description: "Paid plan — full access"
+    permissions: [model:read, model:create, model:upload, model:serve, model:fine-tune, dataset:read, dataset:create, pipeline:read, pipeline:create, pipeline:run]
+  - name: Free Tier
+    role: free_tier
+    institute: cogapi
+    description: "Free plan — read-mostly: browse and upload into existing models"
+    permissions: [model:read, model:upload, pipeline:read, dataset:read, dataset:create]

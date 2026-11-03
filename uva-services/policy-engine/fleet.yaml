@@ -3,7 +3,9 @@ helm:
   repo: https://hiro-microdatacenters-bv.github.io/ds-policy-engine/helm-charts
   chart: ds-policy-engine
   releaseName: ds-policy-engine
-  # Exact pin — see ki-services/policy-engine/fleet.yaml for how to bump.
-  version: 0.1.0-dev.35.main.3a11d6c1
+  # 0.1.0-dev.39.main.1a7f1ec7 (PR #5) adds `rules:` in values and a
+  # rules-loader Job (Helm post-install/post-upgrade hook). The chart version
+  # equals the image tag; pick the `.main.` build from the helm-charts index.
+  version: 0.1.0-dev.39.main.1a7f1ec7
   valuesFiles:
     - values.yaml
