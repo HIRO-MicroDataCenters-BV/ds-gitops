@@ -1,0 +1,78 @@
+# KI single-site DKMS deploy, the same shape as HUS (hus-services/dkms).
+#
+# 1 witness + 1 watcher + mesagkesto in the ki namespace at
+# *.ki.nextgen.hiro-develop.nl. Each site has its own seeds, so its own AIDs.
+#
+# Seeds: NOT in this file (this repo is public). witness.seed, watcher.seed
+# and mesagkesto.seed come from the Secret ki/dkms-seeds through
+# helm.valuesFrom in fleet.yaml — see hus-services/dkms/SEEDS.md
+# (run scripts/seal-dkms-seeds.sh ki --apply).
+
+baseDomain: ki.nextgen.hiro-develop.nl
+
+# keriox 0.17.13 rejects `https` in the three `public_url` fields with
+# "Unsupported scheme https" — it only accepts http (TLS is terminated at
+# ingress). Override the chart's default `https://` pattern here. These
+# URLs are what gets embedded in the OOBIs the witness/watcher advertise;
+# consumers reach them via the ingress and the TLS layer stops at
+# nginx — the keriox pod itself speaks plain HTTP.
+witness:
+  enabled: true
+  replicaCount: 1
+  publicUrlPattern: "http://ds-dkms-witness-{idx}:3232"
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 1Gi
+  # Ingress OFF: the chart builds the Ingress host from publicUrlPattern,
+  # giving "ds-dkms-witness-1:3232" (port in host), which Kubernetes rejects,
+  # so every ds-dkms upgrade failed (Helm release "failed"). Same workaround as
+  # the watcher. Nothing uses the public witness URL today (OOBIs advertise the
+  # in-cluster URL). Re-enable once the chart takes a separate ingress host.
+  #
+  # Public address (#114) reverted 2026-10-28: the edge proxy in front of the
+  # cluster (185.75.195.37, ELIN.hu) redirects every plain-HTTP request to
+  # https with a 302, which breaks keriox clients (http only; a redirected POST
+  # loses its body). Re-apply #114 once the edge stops redirecting
+  # dkms-witness-1.ki.nextgen.hiro-develop.nl.
+  ingress:
+    enabled: false
+  nodeSelector:
+    role: ki
+
+watcher:
+  enabled: true
+  # In-cluster URL so mesagkesto's /register call (which the watcher
+  # advertises in its own OOBI reply) stays inside the cluster and
+  # doesn't bounce through the nginx HTTP→HTTPS redirect, where the
+  # pod has no LE chain and TLS fails.
+  publicUrl: "http://ds-dkms-watcher:3235"
+  # Replaced after first boot: once the witness's AID is known the
+  # operator records its OOBI here so the watcher subscribes on restart.
+  initialOobis: []
+  persistence:
+    enabled: true
+    size: 1Gi
+  # Watcher ingress is DISABLED here because the chart derives the Ingress
+  # host from watcher.publicUrl by stripping the scheme — and our in-cluster
+  # URL ds-dkms-watcher:3235 produces an invalid host (contains a port) that
+  # Kubernetes rejects, failing the whole DKMS Helm render (ErrApplied on
+  # the Fleet bundle).
+  # Nothing outside the cluster needs to reach the watcher — mesagkesto and
+  # ds-login resolve it via the in-cluster Service name. Re-enable only
+  # after the chart separates publicUrl (OOBI content) from ingress.host
+  # (routing) — tracked for a ds-dkms chart fix.
+  ingress:
+    enabled: false
+  nodeSelector:
+    role: ki
+
+mesagkesto:
+  enabled: true
+  publicUrl: "http://dkms-mesagkesto.ki.nextgen.hiro-develop.nl"
+  # Real watcher OOBI (eid = the KI watcher's AID). Empty until this site's
+  # watcher has started once: the chart then renders a placeholder eid, and
+  # the real one is read from the watcher (/introduce) and set here in the
+  # next change. Use the in-cluster service URL so mesagkesto bypasses the
+  # ingress HTTP→HTTPS redirect.
+  watcherOobi: ""

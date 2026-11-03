@@ -1,0 +1,90 @@
+# UVA credential-issuer deploy (same shape as hus-services/credential-issuer).
+# Mints ACDCs bound to subject AIDs and wraps them as IPEX grants that
+# ds-login's AcdcVerifier reads under the open-federation model.
+
+image:
+  # Pinned to a specific SHA-stamped tag published by ds-credential-issuer
+  # CI (format: <appVersion>-dev.<run>.<branch>.<short-sha>). Matches how
+  # every other ds-* service pins its image and lets us use IfNotPresent,
+  # so pod restarts hit the local containerd cache instead of ghcr's
+  # anonymous token endpoint (which rate-limits the cluster egress IP).
+  tag: "0.1.0-dev.78.main.eea3ad0d"
+  pullPolicy: IfNotPresent
+
+# Per-service ingress alongside the gateway route. Easier to hit directly
+# during initial testing; gateway route (/credential-issuer/*) remains for
+# consistent Hiro-internal access.
+# Requires chart 0.1.1+ which added annotations support for cert-manager.
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  host: ds-credential-issuer.uva.nextgen.hiro-develop.nl
+  tls:
+    enabled: true
+    secretName: ds-credential-issuer-tls-secret
+
+issuer:
+  # Alias dkms-bin stores the issuer identifier under.
+  name: uva-issuer
+
+  # role@site (chart 0.2.3): every credential's institute is this site, and
+  # the issuer refuses any other. Roles and who may issue them:
+  # site_admin → every role; operator → data_provider, researcher.
+  institute: uva
+  # Role of the one-time bootstrap credential (POST /bootstrap/operator).
+  bootstrapRole: site_admin
+  # One-time first-admin bootstrap: Secret uva/issuer-bootstrap (key token),
+  # created by hand. Remove this line (and delete the Secret) once the
+  # first site_admin@uva exists, as on HUS (ds-gitops #123 → #124).
+  bootstrapTokenSecret: issuer-bootstrap
+
+  # Chart 0.2.0 facade: dkms-bin takes care of inception, witness
+  # receipting, watcher subscription and OOBI publication on first boot.
+  # See ADR 0002 (ds-login/docs/adr/0002-dkms-bin-facade.md) for the
+  # rationale.
+  dkmsWitnessUrl: http://ds-dkms-witness:3232
+  dkmsWatcherUrl: http://ds-dkms-watcher:3235
+  dkmsWitnessThreshold: 1
+  dkmsHome: /var/lib/ds-credential-issuer/dkms
+
+  # OCA bundle SAID required by `dkms data issue -b <...>`. Empty for
+  # now until the consortium picks a shared schema registry; the smoke
+  # test uses a dummy credential schema.
+  # TODO: set this to a published OCA bundle SAID once the registry
+  # story settles. See ADR 0002 "What's blocking end-to-end".
+  defaultOcaBundleSaid: "EA3UqX0yElhvuw-6fcAgr7gX58IOT8lK5VOqysjdR9hR"
+
+  mesagkestoUrl: http://ds-dkms-mesagkesto:8081
+  inceptionThreshold: 1
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessModes: ["ReadWriteOnce"]
+  size: 2Gi
+  mountPath: /var/lib/ds-credential-issuer
+
+env:
+  DS__ENVIRONMENT: production
+  DS__LOG_LEVEL: INFO
+  # Database for the schema registry (local sqlite inside the PVC).
+  DS__DATABASE_URL: "sqlite+aiosqlite:////var/lib/ds-credential-issuer/schemas.db"
+  # CORS: the website's Credentials page calls the issuer from the browser,
+  # like catalog and search. "*" = every website (image dev.73+ puts CORS in
+  # front of ds-auth, so preflights and 401/403 answers get CORS headers).
+  DS__CORS_ALLOWED_ORIGINS: "*"
+
+# ds-auth middleware — gated by DS__AUTH__ENABLED. Enable once ds-login
+# is deployed and issuing JWTs that this service's permission checks can
+# consume. Mutations require issuer:write, admin requires issuer:admin.
+auth:
+  enabled: true
+  # Clean Service name after ds-login chart 0.1.4 fixed the release-name
+  # doubling in its fullname helper.
+  jwksUrl: http://ds-login:8080/.well-known/jwks.json
+  policyEngineUrl: http://ds-policy-engine:8000
+
+nodeSelector:
+  role: uva
