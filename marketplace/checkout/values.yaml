@@ -12,6 +12,18 @@ env:
     value: "10485760" # 10 MB
   - name:  DS_CONNECTOR_BASE_URL
     value: "https://ds-connector.{region}.nextgen.hiro-develop.nl/distribution-content"
+  # Contracts for orders (generation only; nothing validates them yet). After
+  # storing an order, checkout asks each region's contract generator for a
+  # contract covering that region's datasets; it shows on that site's
+  # Contracts page. Only HUS has a generator, so ki/uva datasets get none.
+  # Best effort: an order is stored even when no contract can be made.
+  # node_id must equal the generator's DS__NODE_ID.
+  - name: CONTRACT_GENERATORS
+    value: '{"hus": {"url": "http://ds-contract-generator.hus.svc.cluster.local:8082", "node_id": "hus.nextgen.hiro-develop.nl"}}'
+  # Consumer named in a contract when the order carries no ds-login token
+  # (the website passes the signed-in user's token; read, not verified).
+  - name: CONTRACT_DEFAULT_CONSUMER_ID
+    value: "unknown@local"
 
 
   - name: DATABASE__PROTOCOL
