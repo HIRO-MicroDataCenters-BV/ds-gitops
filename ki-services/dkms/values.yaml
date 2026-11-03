@@ -70,9 +70,7 @@ watcher:
 mesagkesto:
   enabled: true
   publicUrl: "http://dkms-mesagkesto.ki.nextgen.hiro-develop.nl"
-  # Real watcher OOBI (eid = the KI watcher's AID). Empty until this site's
-  # watcher has started once: the chart then renders a placeholder eid, and
-  # the real one is read from the watcher (/introduce) and set here in the
-  # next change. Use the in-cluster service URL so mesagkesto bypasses the
-  # ingress HTTP→HTTPS redirect.
-  watcherOobi: ""
+  # Real watcher OOBI (eid = the KI watcher's AID, read from its /introduce
+  # on 3 Nov 2026, from this site's seeds). Use the in-cluster service URL so
+  # mesagkesto bypasses the ingress HTTP→HTTPS redirect.
+  watcherOobi: '{"eid":"BP8hU7mO-oV8JiitBTUS2e5bRz6f-FgAEeF5E6d2ZTAx","scheme":"http","url":"http://ds-dkms-watcher:3235/"}'

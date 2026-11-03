@@ -1,0 +1,96 @@
+# KI ds-login deploy (same shape as hus-services/login).
+# Issues short-lived RS256 JWTs after verifying a user's challenge signature
+# + their presented IPEX credential grant. The JWTs are consumed by every
+# other ds-* service via ds-auth.
+
+image:
+  # Pinned to the versioned SHA tag ds-login CI now publishes alongside
+  # 'develop' and 'main' (format: <appVersion>-dev.<run>.<branch>.<short-sha>).
+  # Matches the pattern used by every other ds-* service; combined with
+  # pullPolicy: IfNotPresent this means pod restarts hit the local
+  # containerd cache instead of ghcr's anonymous token endpoint.
+  tag: "0.1.0-dev.141.main.d405a7ac"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 8080
+
+# Per-service ingress; the website calls ds-login here directly. (HUS also has
+# a gateway route /login/*; the ki gateway has none, nothing needs it.)
+# The per-service ingress gives external verifiers, partner-site federations
+# and standards-based JWT libraries the OIDC-conventional URL:
+#   https://ds-login.ki.nextgen.hiro-develop.nl/.well-known/jwks.json
+#
+# cert-manager mints a per-host Let's Encrypt cert into
+# `ds-login-tls-secret` (requires chart 0.1.3+ for annotations support).
+# Same pattern as ds-policy-engine.
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  host: ds-login.ki.nextgen.hiro-develop.nl
+  tls:
+    enabled: true
+    secretName: ds-login-tls-secret
+
+# Point at KI's DKMS stack. In-cluster Service DNS — matches ds-dkms
+# chart service names in the ki namespace.
+# Watcher is used for liveness probing at /login/challenge; witnesses are a
+# fallback path. The main verify flow pulls OOBIs from each incoming grant,
+# not from this static list.
+dkms:
+  watcherUrl: http://ds-dkms-watcher:3235
+  witnessUrls:
+    - http://ds-dkms-witness:3232
+
+jwt:
+  issuer: ds-login
+  audience: hiro-services
+  # 24 hours (Rahul, 2 Nov 2026). A token stays valid until it expires even if
+  # the credential is revoked in the meantime: revocation is checked at login.
+  ttlSeconds: 86400
+  # Persistent RSA signing key. ds-login refuses to start with
+  # environment=production unless this is set (or the inline-PEM env var).
+  # Secret was generated out-of-band with openssl + kubectl create secret
+  # (see ops/ds-login-signing-key.md for the one-shot command). Rotate by
+  # recreating the Secret and restarting the pod — JWTs issued under the
+  # old key stay valid until TTL (86400s).
+  signingKeySecretName: "ds-login-jwt-signing-key"
+  signingKeySecretField: private.pem
+
+environment: production
+logLevel: INFO
+
+# Rahul audit #1 — trusted-issuer allowlist. Without this entry
+# ds-login refuses to start in production (fail-safe default). The
+# listed AID is the KI ds-credential-issuer's own AID (only this site's issuer),
+# visible at startup via:
+#   kubectl -n ki exec deploy/ds-credential-issuer \
+#     -- dkms identifier info ki-issuer
+# Rotate this list whenever the issuer identity rotates (new PVC,
+# fresh init, keystore wipe). A missing entry → every grant minted
+# by that issuer rejected at verify time with 'issuer not on trusted
+# allowlist'.
+# Re-keyed 2026-10-28: issuer re-created on the per-site witness (BE8qbs7O…);
+# the old AID EJ5Wvuqw… was anchored at the HCF demo witness.
+trustedIssuerAids:
+  - EIHOFCwNU0I_an0qk-YzjH_EOd_mpnvjG0x5GrXqAvfQ
+
+# Revocation status per trusted issuer (chart 0.1.6+). ds-login asks
+# GET <url>/credential-status?said=… on every credential login and fails
+# closed: revoked or unreachable → login refused. Every trusted issuer needs
+# an entry, or ds-login refuses to start in production.
+issuerStatusUrls:
+  EIHOFCwNU0I_an0qk-YzjH_EOd_mpnvjG0x5GrXqAvfQ: http://ds-credential-issuer:8080
+
+# CORS (chart 0.1.7+): the website signs the login nonce in the browser and
+# calls ds-login directly, like catalog and search. "*" = every website, as
+# those services allow; ds-login uses no cookies.
+corsAllowedOrigins: ["*"]
+
+nodeSelector:
+  role: ki
