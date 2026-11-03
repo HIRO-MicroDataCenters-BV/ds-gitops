@@ -35,10 +35,9 @@ issuer:
   institute: ki
   # Role of the one-time bootstrap credential (POST /bootstrap/operator).
   bootstrapRole: site_admin
-  # One-time first-admin bootstrap: Secret ki/issuer-bootstrap (key token),
-  # created by hand. Remove this line (and delete the Secret) once the
-  # first site_admin@ki exists, as on HUS (ds-gitops #123 → #124).
-  bootstrapTokenSecret: issuer-bootstrap
+  # One-time first-admin bootstrap: used on 3 Nov 2026 to make the first
+  # site_admin@ki, then closed (no bootstrapTokenSecret, so
+  # POST /bootstrap/operator answers 404), as on HUS (#123 → #124).
 
   # Chart 0.2.0 facade: dkms-bin takes care of inception, witness
   # receipting, watcher subscription and OOBI publication on first boot.
