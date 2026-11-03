@@ -9,11 +9,14 @@ nodeSelector:
 
 namespace: hus
 
-# Gates every non-public catalog path on a valid ds-login JWT. The
-# middleware checks required permissions against ds-policy-engine (see
-# app/rest_api/auth_config.py: PERMISSION_MAP). Without this, GET
-# /catalog/filters/ and friends return 200 to unauthenticated callers.
+# ds-auth is OFF until after the demo (decided 3 Nov 2026). Chart dev.142
+# (#102, which switched it on) never ran on HUS: its image crashes at start
+# with "No module named 'httpx'" (ds-catalog lists httpx only as a test
+# dependency), and the image has no `--extras auth`. Back on dev.141, the
+# version that has served since 14 Oct. When switching auth on later: fix both
+# in ds-catalog first, and give role@hus the catalog:read/catalog:write
+# permissions in the policy engine. Settings kept for then:
 auth:
-  enabled: true
+  enabled: false
   jwksUrl: "http://ds-login:8080/.well-known/jwks.json"
   policyEngineUrl: "http://ds-policy-engine:8000"
