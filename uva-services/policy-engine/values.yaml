@@ -114,8 +114,8 @@ rules:
   - name: researcher-uva
     role: researcher
     institute: uva
-    description: Finds and uses data
-    permissions: [catalog:read, decentralized-search:execute, federated-learning:execute]
+    description: Finds, uses and publishes data
+    permissions: [catalog:read, catalog:write, decentralized-search:execute, federated-learning:execute]
   # Kept from the rules this engine held on 3 Nov 2026 (added in the UI, owner
   # unknown; they look like COG API usage tiers). The loader would otherwise
   # delete them.
