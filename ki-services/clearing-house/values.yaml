@@ -1,0 +1,38 @@
+nodeSelector:
+  role: ki
+
+# Public, so the website's Contracts page (site_admin) can call it from the
+# browser, like the credential issuer. The chart builds the address
+# ds-clearing-house.ki.nextgen.hiro-develop.nl (Let's Encrypt TLS).
+# NO AUTHENTICATION YET (decided 3 Nov 2026, security comes later): anyone who
+# finds this address can list contracts, revoke them, or register fake ones,
+# and the ledger is append-only. The contract generator calls it in-cluster at
+# http://ds-clearing-house:8085. No validator on this site: contracts are not
+# enforced yet (decided 3 Nov 2026).
+ingress:
+  enabled: true
+  host: nextgen.hiro-develop.nl
+
+clearingHouse:
+  # Stamped on every ledger entry; same value as the contract generator's nodeId.
+  nodeId: "ki.nextgen.hiro-develop.nl"
+  environment: "production"
+  logLevel: INFO
+
+# SQLite on a ReadWriteOnce volume (cluster default storage class). The chart
+# runs one replica with strategy Recreate, as SQLite needs. Back this PVC up:
+# it holds every registered contract and its history.
+persistence:
+  enabled: true
+  size: 1Gi
+
+serviceMonitor:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

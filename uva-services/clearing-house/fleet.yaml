@@ -1,0 +1,10 @@
+defaultNamespace: uva
+helm:
+  repo: https://hiro-microdatacenters-bv.github.io/ds-clearing-house/helm-charts
+  chart: ds-clearing-house
+  releaseName: ds-clearing-house
+  # Exact pin — bump this to the latest `.main.` version from gh-pages index.yaml.
+  # The chart version equals the image tag.
+  version: 0.1.0-dev.1.main.ad9145de
+  valuesFiles:
+    - values.yaml

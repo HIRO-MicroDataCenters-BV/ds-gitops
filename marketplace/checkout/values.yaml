@@ -19,7 +19,7 @@ env:
   # Best effort: an order is stored even when no contract can be made.
   # node_id must equal the generator's DS__NODE_ID.
   - name: CONTRACT_GENERATORS
-    value: '{"hus": {"url": "http://ds-contract-generator.hus.svc.cluster.local:8082", "node_id": "hus.nextgen.hiro-develop.nl"}}'
+    value: '{"hus": {"url": "http://ds-contract-generator.hus.svc.cluster.local:8082", "node_id": "hus.nextgen.hiro-develop.nl"}, "ki": {"url": "http://ds-contract-generator.ki.svc.cluster.local:8082", "node_id": "ki.nextgen.hiro-develop.nl"}, "uva": {"url": "http://ds-contract-generator.uva.svc.cluster.local:8082", "node_id": "uva.nextgen.hiro-develop.nl"}}'
   # Consumer named in a contract when the order carries no ds-login token
   # (the website passes the signed-in user's token; read, not verified).
   - name: CONTRACT_DEFAULT_CONSUMER_ID
