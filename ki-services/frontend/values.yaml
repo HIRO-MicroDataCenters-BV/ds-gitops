@@ -19,3 +19,6 @@ backend:
   # witness is not public, so there is no dkmsWitnessURL.
   dsLoginURL: https://ds-login.ki.nextgen.hiro-develop.nl
   credentialIssuerURL: https://ds-credential-issuer.ki.nextgen.hiro-develop.nl
+  # Contracts page (site_admin only): the browser calls the Clearing House
+  # directly. It has no authentication yet — see ki-services/clearing-house.
+  clearingHouseURL: https://ds-clearing-house.ki.nextgen.hiro-develop.nl

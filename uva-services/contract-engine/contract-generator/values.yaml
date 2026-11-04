@@ -1,0 +1,47 @@
+nodeSelector:
+  role: uva
+
+# Enable ingress so the JWKS endpoint is reachable by other nodes' Validators.
+# TEMP: flip to false once ds-gateway fronts the service.
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts:
+    - host: ds-contract-generator.uva.nextgen.hiro-develop.nl
+      paths:
+        - path: /.well-known/jwks.json
+          pathType: Exact
+  tls: []
+
+contractGenerator:
+  # MUST match the node's external identity — used as iss, aud, and JWKS host.
+  nodeId: "uva.nextgen.hiro-develop.nl"
+  # The kid published in the JWT header and JWKS. Bump suffix when keys rotate.
+  signingKeyId: "uva.nextgen.hiro-develop.nl#key-1"
+  # In-cluster URL of the Clearing House (ds-clearing-house, same namespace).
+  clearingHouseUrl: "http://ds-clearing-house:8085"
+  signingKeyPath: "/keys/ed25519.pem"
+  defaultTtlSeconds: 3600
+  maxItemsPerContract: 50
+  environment: "production"
+  logLevel: INFO
+
+# Ed25519 signing key mounted from a Kubernetes Secret.
+# Secret must be created by hand beforehand (never in this public repo), as on hus:
+#   ds-contract-engine/deploy/scripts/generate-signing-key.sh uva uva.nextgen.hiro-develop.nl
+signingKeySecret:
+  enabled: true
+  name: "ds-contract-generator-signing-key"
+  mountPath: "/keys"
+
+serviceMonitor:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
