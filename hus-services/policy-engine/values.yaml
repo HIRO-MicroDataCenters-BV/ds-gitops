@@ -113,5 +113,5 @@ rules:
   - name: researcher-hus
     role: researcher
     institute: hus
-    description: Finds and uses data
-    permissions: [catalog:read, decentralized-search:execute, federated-learning:execute]
+    description: Finds, uses and publishes data
+    permissions: [catalog:read, catalog:write, decentralized-search:execute, federated-learning:execute]
